@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.sy.dao.SyWeituoMapper">
+  <resultMap id="BaseResultMap" type="com.forest.sy.model.SyWeituo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="jynd" jdbcType="VARCHAR" property="jynd" />
+    <result column="ypbh" jdbcType="VARCHAR" property="ypbh" />
+    <result column="jybh" jdbcType="VARCHAR" property="jybh" />
+    <result column="ypmc" jdbcType="VARCHAR" property="ypmc" />
+    <result column="spmc" jdbcType="VARCHAR" property="spmc" />
+    <result column="jyxm" jdbcType="VARCHAR" property="jyxm" />
+    <result column="jyyj" jdbcType="VARCHAR" property="jyyj" />
+    <result column="jymd" jdbcType="VARCHAR" property="jymd" />
+    <result column="jybm" jdbcType="VARCHAR" property="jybm" />
+    <result column="yplx" jdbcType="VARCHAR" property="yplx" />
+    <result column="jx" jdbcType="VARCHAR" property="jx" />
+    <result column="bz" jdbcType="VARCHAR" property="bz" />
+    <result column="gg" jdbcType="VARCHAR" property="gg" />
+    <result column="pzwh" jdbcType="VARCHAR" property="pzwh" />
+    <result column="ph" jdbcType="VARCHAR" property="ph" />
+    <result column="yxq" jdbcType="TIMESTAMP" property="yxq" />
+    <result column="dbl" jdbcType="VARCHAR" property="dbl" />
+    <result column="jpsl" jdbcType="VARCHAR" property="jpsl" />
+    <result column="cjrq" jdbcType="TIMESTAMP" property="cjrq" />
+    <result column="scdw" jdbcType="VARCHAR" property="scdw" />
+    <result column="scdwdz" jdbcType="VARCHAR" property="scdwdz" />
+    <result column="scdwyb" jdbcType="VARCHAR" property="scdwyb" />
+    <result column="scdwlxr" jdbcType="VARCHAR" property="scdwlxr" />
+    <result column="scdwdh" jdbcType="VARCHAR" property="scdwdh" />
+    <result column="sfjj" jdbcType="INTEGER" property="sfjj" />
+    <result column="tyfb" jdbcType="INTEGER" property="tyfb" />
+    <result column="qyfs" jdbcType="VARCHAR" property="qyfs" />
+    <result column="cjlx" jdbcType="VARCHAR" property="cjlx" />
+    <result column="cjyj" jdbcType="VARCHAR" property="cjyj" />
+    <result column="cjhj" jdbcType="VARCHAR" property="cjhj" />
+    <result column="cjdw" jdbcType="VARCHAR" property="cjdw" />
+    <result column="sydw" jdbcType="VARCHAR" property="sydw" />
+    <result column="wtdw" jdbcType="VARCHAR" property="wtdw" />
+    <result column="wtdwdz" jdbcType="VARCHAR" property="wtdwdz" />
+    <result column="wtdwyb" jdbcType="VARCHAR" property="wtdwyb" />
+    <result column="wtdwdh" jdbcType="VARCHAR" property="wtdwdh" />
+    <result column="wtdwcz" jdbcType="VARCHAR" property="wtdwcz" />
+    <result column="wtdwlxr" jdbcType="VARCHAR" property="wtdwlxr" />
+    <result column="wtr" jdbcType="VARCHAR" property="wtr" />
+    <result column="wtrq" jdbcType="TIMESTAMP" property="wtrq" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="sjrq" jdbcType="TIMESTAMP" property="sjrq" />
+    <result column="sqlx" jdbcType="INTEGER" property="sqlx" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="inuse" jdbcType="INTEGER" property="inuse" />
+  </resultMap>
+
+  <select id="getScdwDatas"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
+    SELECT DISTINCT scdw, scdwdz, scdwlxr,scdwyb, scdwdh
+    FROM sy_weituo
+    WHERE scdw LIKE Concat('%',#{keyword},'%')
+    LIMIT 0,10
+  </select>
+
+  <select id="getWtdwDatas"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
+    SELECT DISTINCT a.wtdw, a.wtdwdz, a.wtdwyb,a.wtdwlxr, a.wtdwdh
+    from sy_weituo a
+    where a.wtdw LIKE Concat('%',#{keyword},'%')
+    LIMIT 0,10
+  </select>
+
+  <sql id="where_sql">
+    SELECT a.jybh
+    from sy_weituo a, sy_flowdata b
+    where a.jybh = b.jybh and b.currentstatus > 4
+    <if test="jybm!=null">
+      AND a.jybm = #{jybm}
+    </if>
+    <if test="keyword!=null">
+      AND (a.jybh like concat('%',#{keyword},'%') OR a.ypmc like concat('%',#{keyword},'%') OR a.jyyj like concat('%',#{keyword},'%'))
+    </if>
+  </sql>
+
+  <select id="gethistoryDataCnt" parameterType="java.util.Map" resultType="java.lang.Long">
+    SELECT count(x.jybh) as allcount FROM (
+    <include refid="where_sql" />
+    ) x
+  </select>
+
+  <select id="gethistoryDatas"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
+    SELECT DISTINCT y.*
+    from sy_weituo y, (    <include refid="where_sql" />    ) x
+    where x.jybh = y.jybh
+    ORDER BY y.jybh desc
+    <if test="startindex!=null">
+      LIMIT ${startindex}, ${stopindex}
+    </if>
+  </select>
+
+</mapper>

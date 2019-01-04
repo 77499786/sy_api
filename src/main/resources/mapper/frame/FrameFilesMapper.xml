@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.project.dao.FrameFilesMapper">
+  <resultMap id="BaseResultMap" type="com.forest.project.model.FrameFiles">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="attachmenttitle" jdbcType="VARCHAR" property="attachmenttitle" />
+    <result column="extend" jdbcType="VARCHAR" property="extend" />
+    <result column="realpath" jdbcType="VARCHAR" property="realpath" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="inuse" jdbcType="CHAR" property="inuse" />
+    <result column="attachmentcontent" jdbcType="LONGVARBINARY" property="attachmentcontent" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+</mapper>

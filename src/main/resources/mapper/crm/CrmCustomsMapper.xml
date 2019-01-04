@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.crm.dao.CrmCustomsMapper">
+  <resultMap id="BaseResultMap" type="com.forest.crm.model.CrmCustoms">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="gkxm" jdbcType="VARCHAR" property="gkxm" />
+    <result column="lxdh" jdbcType="VARCHAR" property="lxdh" />
+    <result column="dz" jdbcType="VARCHAR" property="dz" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="isdeleted" jdbcType="INTEGER" property="isdeleted" />
+  </resultMap>
+</mapper>

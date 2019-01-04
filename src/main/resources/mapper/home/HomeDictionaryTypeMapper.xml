@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.home.dao.HomeDictionaryTypeMapper">
+  <resultMap id="BaseResultMap" type="com.forest.home.model.HomeDictionaryType">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+  </resultMap>
+</mapper>

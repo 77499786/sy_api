@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.project.dao.TSBaseUserMapper">
+  <resultMap id="BaseResultMap" type="com.forest.project.model.TSBaseUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="activitiSync" jdbcType="SMALLINT" property="activitisync" />
+    <result column="browser" jdbcType="VARCHAR" property="browser" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="userkey" jdbcType="VARCHAR" property="userkey" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="departid" jdbcType="VARCHAR" property="departid" />
+    <result column="delete_flag" jdbcType="SMALLINT" property="deleteFlag" />
+    <result column="signature" jdbcType="LONGVARBINARY" property="signature" />
+  </resultMap>
+</mapper>

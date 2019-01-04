@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.project.dao.VDepartMapper">
+  <resultMap id="BaseResultMap" type="com.forest.project.model.VDepart">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="departname" jdbcType="VARCHAR" property="departname" />
+    <result column="parentdepartid" jdbcType="VARCHAR" property="parentdepartid" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="org_type" jdbcType="VARCHAR" property="orgType" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="parentname" jdbcType="VARCHAR" property="parentname" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+</mapper>

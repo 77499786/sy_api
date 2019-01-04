@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.cl.dao.ClFlowdefineMapper">
+  <resultMap id="BaseResultMap" type="com.forest.cl.model.ClFlowdefine">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="indexno" jdbcType="INTEGER" property="indexno" />
+    <result column="abbr" jdbcType="VARCHAR" property="abbr" />
+    <result column="nodename" jdbcType="VARCHAR" property="nodename" />
+    <result column="inuse" jdbcType="INTEGER" property="inuse" />
+    <result column="nextnode" jdbcType="INTEGER" property="nextnode" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+</mapper>

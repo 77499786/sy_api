@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.sy.dao.SyResultMapper">
+  <resultMap id="BaseResultMap" type="com.forest.sy.model.SyResult">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="jybh" jdbcType="VARCHAR" property="jybh" />
+    <result column="sortno" jdbcType="INTEGER" property="sortno" />
+    <result column="jyzx" jdbcType="VARCHAR" property="jyzx" />
+    <result column="jyxx" jdbcType="VARCHAR" property="jyxx" />
+    <result column="bzgd" jdbcType="VARCHAR" property="bzgd" />
+    <result column="jyjg1" jdbcType="VARCHAR" property="jyjg1" />
+    <result column="jyjg2" jdbcType="VARCHAR" property="jyjg2" />
+    <result column="jyjg3" jdbcType="VARCHAR" property="jyjg3" />
+    <result column="xmjl" jdbcType="VARCHAR" property="xmjl" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="inuse" jdbcType="INTEGER" property="inuse" />
+  </resultMap>
+</mapper>

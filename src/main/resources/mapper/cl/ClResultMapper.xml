@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.cl.dao.ClResultMapper">
+  <resultMap id="BaseResultMap" type="com.forest.cl.model.ClResult">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="jybh" jdbcType="VARCHAR" property="jybh" />
+    <result column="sortno" jdbcType="INTEGER" property="sortno" />
+    <result column="detect_item" jdbcType="VARCHAR" property="detectItem" />
+    <result column="detect_limit" jdbcType="VARCHAR" property="detectLimit" />
+    <result column="top_residue" jdbcType="VARCHAR" property="topResidue" />
+    <result column="detect_data" jdbcType="VARCHAR" property="detectData" />
+    <result column="detect_result" jdbcType="VARCHAR" property="detectResult" />
+    <result column="inuse" jdbcType="INTEGER" property="inuse" />
+  </resultMap>
+</mapper>

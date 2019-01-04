@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.project.dao.frame.HomeDictionaryMapper">
+  <resultMap id="BaseResultMap" type="com.forest.home.model.HomeDictionary">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="dictionary_code" jdbcType="VARCHAR" property="dictionaryCode" />
+    <result column="dictionary_name" jdbcType="VARCHAR" property="dictionaryName" />
+    <result column="dictionary_type" jdbcType="VARCHAR" property="dictionaryType" />
+    <result column="isdeleted" jdbcType="INTEGER" property="isdeleted" />
+  </resultMap>
+</mapper>

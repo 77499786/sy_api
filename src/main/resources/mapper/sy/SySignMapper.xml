@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.sy.dao.SySignMapper">
+  <resultMap id="BaseResultMap" type="com.forest.sy.model.SySign">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="keytitle" jdbcType="VARCHAR" property="keytitle" />
+    <result column="imgPath" jdbcType="VARCHAR" property="imgpath" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="inuse" jdbcType="INTEGER" property="inuse" />
+  </resultMap>
+</mapper>

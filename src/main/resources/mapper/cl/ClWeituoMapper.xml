@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.cl.dao.ClWeituoMapper">
+    <resultMap id="BaseResultMap" type="com.forest.cl.model.ClWeituo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="modifer" jdbcType="VARCHAR" property="modifer"/>
+        <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime"/>
+        <result column="sydbh" jdbcType="VARCHAR" property="sydbh"/>
+        <result column="ypbh" jdbcType="VARCHAR" property="ypbh"/>
+        <result column="jybh" jdbcType="VARCHAR" property="jybh"/>
+        <result column="ypmc" jdbcType="VARCHAR" property="ypmc"/>
+        <result column="zsbh" jdbcType="VARCHAR" property="zsbh"/>
+        <result column="bfqk" jdbcType="VARCHAR" property="bfqk"/>
+        <result column="bcqk" jdbcType="VARCHAR" property="bcqk"/>
+        <result column="ysqk" jdbcType="VARCHAR" property="ysqk"/>
+        <result column="ypsl" jdbcType="VARCHAR" property="ypsl"/>
+        <result column="cjrq" jdbcType="TIMESTAMP" property="cjrq"/>
+        <result column="jyxm" jdbcType="VARCHAR" property="jyxm"/>
+        <result column="jyyj" jdbcType="VARCHAR" property="jyyj"/>
+        <result column="sjwmc" jdbcType="VARCHAR" property="sjwmc"/>
+        <result column="qyfs" jdbcType="VARCHAR" property="qyfs"/>
+        <result column="sjwdz" jdbcType="VARCHAR" property="sjwdz"/>
+        <result column="sjdwyb" jdbcType="VARCHAR" property="sjdwyb"/>
+        <result column="sjdwlxr" jdbcType="VARCHAR" property="sjdwlxr"/>
+        <result column="sjdwdh" jdbcType="VARCHAR" property="sjdwdh"/>
+        <result column="cjcs" jdbcType="VARCHAR" property="cjcs"/>
+        <result column="cjyj" jdbcType="VARCHAR" property="cjyj"/>
+        <result column="wtkhw" jdbcType="VARCHAR" property="wtkhw"/>
+        <result column="wtkhdz" jdbcType="VARCHAR" property="wtkhdz"/>
+        <result column="wtkhyb" jdbcType="VARCHAR" property="wtkhyb"/>
+        <result column="wtkhdh" jdbcType="VARCHAR" property="wtkhdh"/>
+        <result column="wtkhlxr" jdbcType="VARCHAR" property="wtkhlxr"/>
+        <result column="yxfb" jdbcType="INTEGER" property="yxfb"/>
+        <result column="wtr" jdbcType="VARCHAR" property="wtr"/>
+        <result column="wtrq" jdbcType="TIMESTAMP" property="wtrq"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="sjrq" jdbcType="TIMESTAMP" property="sjrq"/>
+        <result column="cljynd" jdbcType="VARCHAR" property="cljynd"/>
+        <result column="scdw" jdbcType="VARCHAR" property="scdw"/>
+        <result column="rwly" jdbcType="VARCHAR" property="rwly"/>
+        <result column="inuse" jdbcType="INTEGER" property="inuse"/>
+        <result column="yswt" jdbcType="LONGVARBINARY" property="yswt"/>
+    </resultMap>
+
+    <select id="callRemainDatas" statementType="CALLABLE" parameterType="java.util.Map"
+            resultType="java.util.Map">
+    <![CDATA[
+      {call callRemainDatas(#{datatype, mode=IN, jdbcType=VARCHAR}, #{sqlwhere, mode=IN, jdbcType=VARCHAR})}
+        ]]>
+  </select>
+
+    <select id="getSjdwDatas" parameterType="java.lang.String" resultMap="BaseResultMap">
+      SELECT DISTINCT sjwmc, sjwdz, sjdwlxr,sjdwyb, sjdwdh
+      FROM cl_weituo
+      WHERE sjwmc LIKE Concat('%',#{keyword},'%')
+      LIMIT 0,10
+    </select>
+
+    <select id="getScdwDatas" parameterType="java.lang.String" resultMap="BaseResultMap">
+      SELECT DISTINCT scdw
+      FROM cl_weituo
+      WHERE scdw LIKE Concat('%',#{keyword},'%')
+      LIMIT 0,10
+    </select>
+
+    <select id="getSingleItem"  resultType="java.lang.String">
+      SELECT DISTINCT ${arg0}
+      FROM cl_weituo
+      WHERE ${arg0} LIKE Concat('%',#{arg1},'%')
+      LIMIT 0,10
+    </select>
+
+    <select id="getWtdwDatas" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT DISTINCT a.wtkhw, a.wtkhdz, a.wtkhyb,a.wtkhlxr, a.wtkhdh
+        from cl_weituo a
+        where a.wtkhw LIKE Concat('%',#{keyword},'%')
+        LIMIT 0,10
+    </select>
+
+    <!-- 兽药检验数据查询条件 -->
+    <sql id="where_sql">
+        SELECT x.jybh, x.ypbh, x.sydbh, x.ypmc, x.zsbh, x.sjwmc, x.wtkhw, y.currentstatus, y.todoperson, x.sjrq
+        FROM  cl_weituo AS x,
+        cl_flowdata y
+        WHERE x.jybh = y.jybh AND  x.inuse = 1
+        <if test="cljynd!=null">
+            AND x.cljynd = #{cljynd}
+        </if>
+        <if test="rwly!=null">
+            AND x.rwly = #{rwly}
+        </if>
+        <if test="currentstatus!=null and currentstatus!=2 and currentstatus!=19 and currentstatus!=98">
+            AND y.currentstatus = #{currentstatus}
+        </if>
+        <if test="currentstatus!=null and currentstatus==2">
+            AND y.currentstatus IN (1,2)
+        </if>
+        <if test="currentstatus!=null and (currentstatus==19 or currentstatus==98)">
+            AND y.currentstatus IN (9, 10, 99)
+        </if>
+        <if test="currentstatus!=null and currentstatus==5 and userid!=null">
+            AND y.todoperson = #{userid}
+        </if>
+        <if test="startday!=null">
+            AND y.sjrq <![CDATA[>=]]> #{startday}
+        </if>
+        <if test="stopday!=null">
+            AND y.sjrq <![CDATA[<=]]>  #{stopday}
+        </if>
+        <if test="keyword!=null">
+            AND (x.jybh like concat('%',#{keyword},'%') OR x.sydbh like concat('%',#{keyword},'%')
+            OR x.ypmc like concat('%',#{keyword},'%') OR x.zsbh like concat('%',#{keyword},'%')
+            OR x.sjwmc like concat('%',#{keyword},'%') OR x.wtkhw like concat('%',#{keyword},'%')
+            )
+        </if>
+    </sql>
+
+    <select id="queryRemainCounts" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT count(a.jybh)
+        FROM (
+        <include refid="where_sql" />
+        )  a
+    </select>
+
+    <select id="queryRemainInfors" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        a.sydbh,a.ypbh, a.jybh, a.ypmc, a.zsbh, a.bfqk, a.bcqk, a.ysqk, a.ypsl, DATE_FORMAT(a.cjrq,'%Y-%m-%d') as cjrq,
+        a.jyxm, c.itemname as jyxmmc, a.jyyj, a.sjwmc, a.qyfs, d1.`name` as qyfsmc, a.ysqk, d4.`name` as bfqkmc,
+        a.bfqk, d5.`name` as bcqkmc, a.bcqk, d6.`name` as ysqkmc,
+        a.sjwdz, a.sjdwyb, a.sjdwlxr, a.sjdwdh, a.cjcs, d2.`name` as cjcsmc, a.cjyj,
+        a.wtkhw, a.wtkhdz, a.wtkhyb, a.wtkhdh, a.wtkhlxr, a.yxfb, a.wtr, DATE_FORMAT(a.wtrq,'%Y-%m-%d') as wtrq,
+        a.remark, DATE_FORMAT(a.sjrq,'%Y-%m-%d') as sjrq, a.cljynd, a.inuse, a.yswt, a.id,
+        a.rwly, d3.`name` as rwlymc,
+        b.currentstatus, d.nodename as nodename,
+        b.sfdj, e1.name as sjr, DATE_FORMAT(b.syqr,'%Y-%m-%d') as syqr, e2.name as jysqrr,
+        DATE_FORMAT(b.jyqr,'%Y-%m-%d') as jyqr,
+        b.ypcll, b.jyjl,b.hsqrr,
+        DATE_FORMAT(b.hsqr,'%Y-%m-%d') as hsqr,
+        b.todoperson, e.name as jianyanren, b.lccljl, b.tjdx
+        FROM (
+        <include refid="where_sql" />
+        ) s
+        INNER  JOIN  cl_weituo AS a ON  a.jybh = s.jybh
+        INNER JOIN cl_flowdata AS b ON a.jybh = b.jybh
+        LEFT JOIN cl_detectitem as c on a.jyxm = c.id
+        LEFT JOIN frame_dictionary as d3 on a.rwly = d3.id
+        LEFT JOIN frame_dictionary as d1 on a.qyfs = d1.id
+        LEFT JOIN frame_dictionary as d2 on a.cjcs = d2.id
+        LEFT JOIN frame_dictionary as d4 on a.bfqk = d4.id
+        LEFT JOIN frame_dictionary as d5 on a.bcqk = d5.id
+        LEFT JOIN frame_dictionary as d6 on a.ysqk = d6.id
+        LEFT JOIN cl_flowdefine as d on b.currentstatus = d.indexno
+        LEFT JOIN frame_employee as e on e.userid = b.todoperson
+        LEFT JOIN frame_employee as e1 on e1.userid = b.sjr
+        LEFT JOIN frame_employee as e2 on e2.userid = b.jysqrr
+        LEFT JOIN frame_employee as e3 on e3.userid = b.hsqrr
+        <if test="orderby!=null">
+            ORDER BY ${orderby}
+        </if>
+        <if test="startindex!=null">
+            LIMIT ${startindex}, ${stopindex}
+        </if>
+    </select>
+
+    <select id="queryList" parameterType="java.util.Map" resultType="java.util.Map">
+        select a.jybh, a.detect_item, d7.name as jyxmmc, d8.name as detectItemName, a.detect_limit as detectLimit,
+                a.detect_data as detectData, a.detect_result as detectResult, a.top_residue as topResidue, b.sydbh,b.ypbh,
+               b.ypmc, b.rwly,d4.name as rwlymc, b.cjyj, b.cjcs,d5.name as cjcsmc,b.bfqk,d1.name as bfqkmc,
+               b.bcqk,d2.name as bcqkmc,b.ysqk,d3.name as ysqkmc,b.cjrq,b.qyfs, d6.name as qyfsmc,
+               b.sjwmc, b.wtkhw,b.wtr,b.wtrq, c.jyjl
+        from cl_result a , cl_weituo b , cl_flowdata c,
+            frame_dictionary d1 , frame_dictionary d2, frame_dictionary d3,frame_dictionary d4,
+            frame_dictionary d5,frame_dictionary d6,frame_dictionary d7,frame_dictionary d8
+        where d7.id=JSON_EXTRACT(a.detect_item,'$[0]') and d8.id=JSON_EXTRACT(a.detect_item,'$[1]')
+          and d1.id = b.bfqk and d2.id = b.bcqk and d3.id = b.ysqk and d4.id = b.rwly
+          and d5.id = b.cjcs and d6.id = b.qyfs  and a.jybh = b.jybh and a.jybh = c.jybh
+        <if test="sqlwhere!=null">
+            AND ${sqlwhere}
+        </if>
+    </select>
+</mapper>

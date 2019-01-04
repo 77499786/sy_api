@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.sy.dao.SyApplyMapper">
+  <resultMap id="BaseResultMap" type="com.forest.sy.model.SyApply">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="compid" jdbcType="VARCHAR" property="compid" />
+    <result column="sqph" jdbcType="VARCHAR" property="sqph" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sqrq" jdbcType="TIMESTAMP" property="sqrq" />
+    <result column="sprq" jdbcType="TIMESTAMP" property="sprq" />
+    <result column="spxx" jdbcType="VARCHAR" property="spxx" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="inuse" jdbcType="INTEGER" property="inuse" />
+    <result column="iscjwt" jdbcType="INTEGER" property="iscjwt" />
+  </resultMap>
+
+  <select id="updateFlowStatus">
+      UPDATE sy_flowdata a, sy_weituo w, sy_apply_wt b
+      SET a.currentstatus = 2
+      WHERE a.jybh = w.jybh and w.ypbh = b.ypbh and b.sqph=#{arg0}
+    </select>
+</mapper>

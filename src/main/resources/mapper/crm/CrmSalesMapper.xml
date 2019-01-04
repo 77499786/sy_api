@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forest.crm.dao.CrmSalesMapper">
+  <resultMap id="BaseResultMap" type="com.forest.crm.model.CrmSales">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="xh" jdbcType="INTEGER" property="xh" />
+    <result column="xsrq" jdbcType="TIMESTAMP" property="xsrq" />
+    <result column="sp" jdbcType="VARCHAR" property="sp" />
+    <result column="gk" jdbcType="VARCHAR" property="gk" />
+    <result column="xssl" jdbcType="INTEGER" property="xssl" />
+    <result column="cbdj" jdbcType="INTEGER" property="cbdj" />
+    <result column="xsdj" jdbcType="INTEGER" property="xsdj" />
+    <result column="xszj" jdbcType="INTEGER" property="xszj" />
+    <result column="spbm" jdbcType="VARCHAR" property="spbm" />
+    <result column="kddh" jdbcType="VARCHAR" property="kddh" />
+    <result column="fdsj" jdbcType="TIMESTAMP" property="fdsj" />
+    <result column="kdfy" jdbcType="INTEGER" property="kdfy" />
+    <result column="sdqrsj" jdbcType="TIMESTAMP" property="sdqrsj" />
+    <result column="gkfk" jdbcType="VARCHAR" property="gkfk" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="jsbz" jdbcType="INTEGER" property="jsbz" />
+    <result column="sfbz" jdbcType="INTEGER" property="sfbz" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="modifer" jdbcType="VARCHAR" property="modifer" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="isdeleted" jdbcType="INTEGER" property="isdeleted" />
+
+  </resultMap>
+</mapper>
