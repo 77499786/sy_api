@@ -25,6 +25,10 @@ public class AsposeUtil {
     private static String SY_FAKE_TEMPLATE_NAME = "兽药检验报告（假兽药）.docx";
     private static String SY_APPLY_TEMPLATE_NAME = "抽检清单.docx";
 
+    public static String getOfficeTemplatePath(){
+        return String.format("%s%sword/",ScsyReportUtil.getSystemRootPath(), ScsyReportUtil.getTemplatePath());
+    }
+
     public static boolean getLicense() throws Exception {
         boolean result = false;
         try {
@@ -105,9 +109,9 @@ public class AsposeUtil {
      * @return 保存后的文件名称（相对路径）
      */
     public static String createPdfReport(String filename, Map<String, Object> mapDatas) {
-        String templateFile = ScsyReportOfficeUtil.getOfficeTemplatePath().concat(REMAIN_TEMPLATE_NAME);
+        String templateFile = getOfficeTemplatePath().concat(REMAIN_TEMPLATE_NAME);
         String relativePath = ScsyReportUtil.CL_SUBDICTIONARY.concat(filename).concat(ScsyReportUtil.PDF_SUFFIX);
-        String targetFile = ScsyReportOfficeUtil.getRealReportPath().concat(relativePath);
+        String targetFile = ScsyReportUtil.getRealReportPath().concat(relativePath);
         DataTable dt = convert2DataTable((List<Map<String, Object>>)mapDatas.get("检验结果"), "检验结果");
 //        DataTable dt = convert2DataTable(results, "检验结果");
         String file = replaceText(templateFile, targetFile, mapDatas, dt, SaveFormat.PDF);
@@ -125,10 +129,10 @@ public class AsposeUtil {
      * @return
      */
     public static String exportContractPdf(String filename, Map<String, Object> dataMap) {
-        String templateFile = ScsyReportOfficeUtil.getOfficeTemplatePath().concat(SY_CONTRACT_TEMPLATE_NAME);
+        String templateFile = getOfficeTemplatePath().concat(SY_CONTRACT_TEMPLATE_NAME);
         String fileSufix = "_ht.pdf";
         String subDictionary = "hetong/";
-        String targetFile = ScsyReportOfficeUtil.getRealReportPath().concat(subDictionary)
+        String targetFile = ScsyReportUtil.getRealReportPath().concat(subDictionary)
                 .concat(filename).concat(fileSufix);
         String file = replaceText(templateFile, targetFile, dataMap, null, SaveFormat.PDF);
         String relativeFile = ScsyReportUtil.getReportPath().concat(subDictionary).concat(filename).concat(fileSufix);
@@ -145,10 +149,10 @@ public class AsposeUtil {
      * @return
      */
     public static String createChoujiandanPdf(String filename, Map<String, Object> dataMap) {
-        String templateFile = ScsyReportOfficeUtil.getOfficeTemplatePath().concat(SY_INSPECTION_TEMPLATE_NAME);
+        String templateFile = getOfficeTemplatePath().concat(SY_INSPECTION_TEMPLATE_NAME);
         String fileSufix = ".pdf";
         String subDictionary = "choujian/";
-        String targetFile = ScsyReportOfficeUtil.getRealReportPath().concat(subDictionary)
+        String targetFile = ScsyReportUtil.getRealReportPath().concat(subDictionary)
                 .concat(filename).concat(fileSufix);
         String file = replaceText(templateFile, targetFile, dataMap, null, SaveFormat.PDF);
         String relativeFile = ScsyReportUtil.getReportPath().concat(subDictionary).concat(filename).concat(fileSufix);
@@ -167,10 +171,10 @@ public class AsposeUtil {
      */
     public static String createApplyListPdf(String filename, Map<String, Object> dataMap,
                                             List<Map<String, Object>> lst) {
-        String templateFile = ScsyReportOfficeUtil.getOfficeTemplatePath().concat(SY_APPLY_TEMPLATE_NAME);
+        String templateFile = getOfficeTemplatePath().concat(SY_APPLY_TEMPLATE_NAME);
         String fileSufix = ".pdf";
         String subDictionary = "apply/";
-        String targetFile = ScsyReportOfficeUtil.getRealReportPath().concat(subDictionary)
+        String targetFile = ScsyReportUtil.getRealReportPath().concat(subDictionary)
                 .concat(filename).concat(fileSufix);
         DataTable dt = convert2DataTable(lst, "样品信息");
         String file = replaceText(templateFile, targetFile, dataMap, dt, SaveFormat.PDF);
@@ -200,11 +204,11 @@ public class AsposeUtil {
             }
         }
 //        String template = "是".equals(mapDatas.get("假兽药")) ? SY_FAKE_TEMPLATE_NAME : SY_INSPECTION_REPORT_TEMPLATE_NAME;
-        String templateFile = ScsyReportOfficeUtil.getOfficeTemplatePath().concat(template);
+        String templateFile = getOfficeTemplatePath().concat(template);
 //        String fileSufix = ".pdf";
 //        String subDictionary = ScsyReportUtil.SY_SUBDICTIONARY;
         String relativePath = ScsyReportUtil.SY_SUBDICTIONARY.concat(filename).concat(ScsyReportUtil.PDF_SUFFIX);
-        String targetFile = ScsyReportOfficeUtil.getRealReportPath().concat(relativePath);
+        String targetFile = ScsyReportUtil.getRealReportPath().concat(relativePath);
         DataTable dt = convert2DataTable((List<Map<String, Object>>)mapDatas.get("检验结果"), "检验结果");
         String file = replaceText(templateFile, targetFile, mapDatas, dt, SaveFormat.PDF);
         String relativeFile = ScsyReportUtil.getReportPath().concat(relativePath);

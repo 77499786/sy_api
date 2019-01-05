@@ -2,14 +2,12 @@ package com.forest.sy.model;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.forest.utils.DateUtils;
 import com.forest.utils.FlowNodeData;
 import com.google.common.base.Strings;
-import org.apache.poi.ss.usermodel.DateUtil;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
 
 @Table(name = "sy_flowdata")
 public class SyFlowdata {

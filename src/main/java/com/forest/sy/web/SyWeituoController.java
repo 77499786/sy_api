@@ -492,7 +492,7 @@ public class SyWeituoController extends BaseController {
 //                    FileUtils.copyFile(f.getPath(), folder.getPath()+"/" + f.getName());
 //                }
     }
-    String targetFile = ScsyReportOfficeUtil.getRealReportPath().concat(ScsyReportUtil.SY_SUBDICTIONARY)
+    String targetFile = ScsyReportUtil.getRealReportPath().concat(ScsyReportUtil.SY_SUBDICTIONARY)
         .concat("兽药检验报告").concat(DateUtils.formatYMDHMS()).concat(".zip");
     ZIPUtil.compress(filenames, targetFile);
     return ResultGenerator.genSuccessResult(ScsyReportUtil.path2Url(targetFile));

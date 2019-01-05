@@ -168,11 +168,7 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
   @Override
   public String exportReport(String jpbhs) {
     // jasper报表模式
-    if (ConStant.REPORT_TYPE_JASPER.equals(ConStant.REPORT_TYPE)) {
-      return exportJasperReport(jpbhs);
-    } else {
-      return exportWordReport(jpbhs);
-    }
+    return exportWordReport(jpbhs);
   }
 
   @Override
@@ -190,11 +186,7 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
     datamap.put("规格", syWeituo.getGg());
     datamap.put("批准文号", syWeituo.getPzwh());
     datamap.put("批号", syWeituo.getPh());
-    if (ConStant.REPORT_TYPE_JASPER.equals(ConStant.REPORT_TYPE)) {
-      return ScsyReportJasperUtil.createChoujiandanPdf(ypbh, datamap);
-    } else {
-      return AsposeUtil.createChoujiandanPdf(ypbh, datamap);
-    }
+    return AsposeUtil.createChoujiandanPdf(ypbh, datamap);
   }
 
   @Override
@@ -229,11 +221,7 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
     datamap.put("传真", syWeituo.getWtdwcz());
     datamap.put("邮编", syWeituo.getWtdwyb());
     datamap.put("分包名称", "扩展字段");
-    if (ConStant.REPORT_TYPE_JASPER.equals(ConStant.REPORT_TYPE)) {
-      return ScsyReportJasperUtil.exportContractPdf(ypbh, datamap);
-    } else {
-      return AsposeUtil.exportContractPdf(ypbh, datamap);
-    }
+    return AsposeUtil.exportContractPdf(ypbh, datamap);
   }
 
   /**
@@ -300,12 +288,12 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
     List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
     String jyzx = "";
     for (SyResult ret : rets) {
-      if (!jyzx.equals(ret.getJyzx())){
+      if (!jyzx.equals(ret.getJyzx())) {
         if (!Strings.isNullOrEmpty(jyzx)) {
           results.add(new HashMap<String, Object>());
         }
         jyzx = ret.getJyzx();
-        if(Strings.isNullOrEmpty(ret.getJyxx())){
+        if (Strings.isNullOrEmpty(ret.getJyxx())) {
           Map<String, Object> lst = new HashMap<String, Object>();
           lst.put("检验项目", String.format("【%s】", jyzx));
           lst.put("标准规定", ret.getBzgd());
@@ -336,64 +324,6 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
     }
     results.add(new HashMap<String, Object>());
     return results;
-  }
-
-  /**
-   * 按报表格式进行报告生成
-   *
-   * @param jpbhs
-   * @return
-   */
-  private String exportJasperReport(String jpbhs) {
-    // 读取信息
-    List<String> filenamelst = new ArrayList<String>();
-    List<String> bhlist = new ArrayList<String>();
-    Condition condition = new Condition(SyWeituo.class);
-    Example.Criteria criteria = condition.createCriteria();
-    criteria.andIn("jybh", Arrays.asList(jpbhs.split(",")));
-    List<SyWeituo> datas = super.findByCondition(condition);
-    for (SyWeituo e : datas) {
-      // 委托信息
-      Map<String, Object> infors = getweituoInfo(e);
-      // 读取检验结果
-      Condition conditionResult = new Condition(SyWeituo.class);
-      conditionResult.createCriteria().andEqualTo("jybh", e.getJybh());
-      List<SyResult> rets = syResultService.findByCondition(conditionResult);
-      List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-      for (SyResult ret : rets) {
-        Map<String, Object> mapres = new HashMap<String, Object>();
-        mapres.put("检测总项", ret.getJyzx());
-        mapres.put("检测细项", ret.getJyxx());
-        mapres.put("标准规定", ret.getBzgd());
-        mapres.put("检验结果", ret.getJyjg1());
-        mapres.put("检验结果2", ret.getJyjg2());
-        mapres.put("检验结果3", ret.getJyjg3());
-        mapres.put("项目结论", ret.getXmjl());
-        results.add(mapres);
-      }
-      Map<String, Object> resultsmap = new HashMap<String, Object>();
-      resultsmap.put("检测结果数据", results);
-      List<Object> fields = new ArrayList<Object>();
-      fields.add(resultsmap);
-      String filepath = ScsyReportJasperUtil.exportReportPdf(e.getJybh(), infors, fields);
-      // 生成pdf报告
-      if (StringUtils.isNotBlank(filepath)) {
-        bhlist.add(e.getJybh());
-        filenamelst.add(filepath);
-      }
-    }
-
-    // 更新检验处理进度
-    Map<String, Object> params = new HashMap<String, Object>();
-    params.put(SyFlowdata.KEYS_ISBACK, false);
-    params.put(SyFlowdata.KEYS_CURRENTNODE, SyFlowdata.KEYS_FLOW_PRINT);
-    // 提交/退回节点
-    params.put(SyFlowdata.KEYS_NEXTNODE, SyFlowdata.KEYS_FLOW_LOCKED);
-    String jybhs = Arrays.toString(bhlist.toArray());
-    params.put(SyFlowdata.KEYS_JYBH, jybhs.replace("[", "").replace("]", ""));
-    // 更新当前进度情况(进入归档环节)
-//        this.submitProcess(params);
-    return ScsyReportUtil.mergePdfFiles(filenamelst, ScsyReportUtil.SY_SUBDICTIONARY);
   }
 
   /**
@@ -478,8 +408,8 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
     return DateUtils.formatDate();
   }
 
-  private String formatNull(String val){
-    return Strings.isNullOrEmpty(val) ? "/":val;
+  private String formatNull(String val) {
+    return Strings.isNullOrEmpty(val) ? "/" : val;
   }
 
 }
