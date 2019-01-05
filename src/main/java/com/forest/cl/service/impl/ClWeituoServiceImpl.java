@@ -1,16 +1,16 @@
 package com.forest.cl.service.impl;
 
 import com.forest.cl.dao.ClWeituoMapper;
-import com.forest.cl.model.*;
+import com.forest.cl.model.ClFlowdata;
+import com.forest.cl.model.ClFlowdefine;
+import com.forest.cl.model.ClResult;
+import com.forest.cl.model.ClWeituo;
 import com.forest.cl.service.*;
 import com.forest.core.AbstractService;
 import com.forest.project.model.FrameEmployee;
 import com.forest.project.service.FrameEmployeeService;
 import com.forest.utils.*;
-import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
-//import org.jodconverter.DocumentConverter;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Condition;
@@ -18,6 +18,8 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.*;
+
+//import org.jodconverter.DocumentConverter;
 
 /**
  * Created by CodeGenerator on 2018/08/22.
@@ -147,7 +149,7 @@ public class ClWeituoServiceImpl extends AbstractService<ClWeituo> implements Cl
     public String exportReport(String jpbhs) {
         // jasper报表模式
         if(ConStant.REPORT_TYPE_JASPER.equals(ConStant.REPORT_TYPE)){
-            return exportJasperReport(jpbhs);
+            return null;
         } else {
             return exportWord2Pdf(jpbhs);
         }
@@ -216,61 +218,6 @@ public class ClWeituoServiceImpl extends AbstractService<ClWeituo> implements Cl
      * @param jpbhs
      * @return
      */
-    private String exportJasperReport(String jpbhs){
-        // 读取信息
-        List<String> filenamelst = new ArrayList<String>();
-        List<String> bhlist = new ArrayList<String>();
-        Condition condition = new Condition(ClWeituo.class);
-        Example.Criteria criteria =  condition.createCriteria();
-        criteria.andIn("jybh",Arrays.asList(jpbhs.split(",")));
-        List<ClWeituo> datas = super.findByCondition(condition);
-        for(ClWeituo e: datas){
-            // 委托信息
-            Map<String, Object> infors = getweituoInfo(e);
-            // 读取检验结果
-            Condition conditionResult = new Condition(ClWeituo.class);
-            conditionResult.createCriteria().andEqualTo("jybh",e.getJybh());
-            List<ClResult> rets = clResultService.findByCondition(conditionResult);
-            List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-            for(ClResult ret : rets){
-                Map<String, Object> mapres = new HashMap<String, Object>();
-                mapres.put("检测项目" ,ret.getDetectItem());
-                mapres.put("检测限" ,ret.getDetectLimit());
-                mapres.put("最高残留量" ,ret.getTopResidue());
-                mapres.put("监测数据" ,ret.getDetectData());
-                mapres.put("检测结果" ,ret.getDetectResult());
-                results.add(mapres);
-            }
-            Map<String, Object> resultsmap = new HashMap<String, Object>();
-            resultsmap.put("检测结果数据", results);
-            List<Object> fields = new ArrayList<Object>();
-            fields.add(resultsmap);
-            String filepath= ScsyReportJasperUtil.exportRemainReportPdf(e.getJybh(), infors, fields);
-            // 生成pdf报告
-            if(StringUtils.isNotBlank(filepath)){
-                bhlist.add(e.getJybh());
-                filenamelst.add(filepath);
-            }
-        }
-
-        // 更新检验处理进度
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put(ClFlowdata.KEYS_ISBACK, false);
-        params.put(ClFlowdata.KEYS_CURRENTNODE, ClFlowdata.KEYS_FLOW_PRINT);
-        // 提交/退回节点
-        params.put(ClFlowdata.KEYS_NEXTNODE, ClFlowdata.KEYS_FLOW_LOCKED);
-        String jybhs = Arrays.toString(bhlist.toArray());
-        params.put(ClFlowdata.KEYS_JYBH, jybhs.replace("[", "").replace("]", ""));
-        // 更新当前进度情况(进入归档环节)
-//        this.submitProcess(params);
-        return ScsyReportUtil.mergePdfFiles(filenamelst, ScsyReportUtil.CL_SUBDICTIONARY);
-    }
-
-    /**
-     * 按报表格式进行报告生成
-     * @param jpbhs
-     * @return
-     */
     private String exportWord2Pdf(String jpbhs){
         // office模式
         List<String> filenamelst = new ArrayList<String>();
@@ -317,7 +264,7 @@ public class ClWeituoServiceImpl extends AbstractService<ClWeituo> implements Cl
         params.put(ClFlowdata.KEYS_JYBH, bhlist);
 //        // 更新当前进度情况(进入归档环节)
 //        this.submitProcess(params);
-        return ScsyReportOfficeUtil.mergePdfFiles(filenamelst, ScsyReportUtil.CL_SUBDICTIONARY);
+        return ScsyReportUtil.mergePdfFiles(filenamelst, ScsyReportUtil.CL_SUBDICTIONARY);
     }
 
     /**
