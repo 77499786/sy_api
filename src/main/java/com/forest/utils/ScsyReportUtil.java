@@ -60,7 +60,7 @@ public class ScsyReportUtil {
 	 */
 	public static String getSystemRootPath(){
 		if(isdebug){
-			systemPath_of_template = "C:/java/work/scsy/";
+			systemPath_of_template = "C:/java/work/sy_api/sy_api/";
 		} else {
 			if(Strings.isNullOrEmpty(systemPath_of_template)){
 				systemPath_of_template = JarToolUtil.getJarDir();
