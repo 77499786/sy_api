@@ -5,7 +5,6 @@ import com.aspose.words.Shape;
 import com.aspose.words.net.System.Data.DataColumnCollection;
 import com.aspose.words.net.System.Data.DataRow;
 import com.aspose.words.net.System.Data.DataTable;
-import com.google.common.base.Strings;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 
@@ -18,6 +17,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 /**
  * 利用Aspose组件生成报表
@@ -30,7 +30,8 @@ public class AsposeUtil {
   private static String SY_REPORT_TEMPLATE_NAME = "兽药检验报告.docx";
   private static String SY_INSPECTION_REPORT_TEMPLATE_NAME = "兽药检验报告（抽检）.docx";
   private static String SY_FAKE_TEMPLATE_NAME = "兽药检验报告（假兽药）.docx";
-  private static String SY_APPLY_TEMPLATE_NAME = "抽检清单.docx";
+  private static String SY_APPLY_TEMPLATE_NAME = "申请清单.docx";
+  private static String SY_CHOUJIAN_TEMPLATE_NAME = "抽检清单.docx";
 
   public static String getOfficeTemplatePath() {
     return String.format("%s%sword/", ScsyReportUtil.getSystemRootPath(), ScsyReportUtil.getTemplatePath());
@@ -180,7 +181,7 @@ public class AsposeUtil {
    */
   public static String createApplyListPdf(String filename, Map<String, Object> dataMap,
                                           List<Map<String, Object>> lst) {
-    String templateFile = getOfficeTemplatePath().concat(SY_APPLY_TEMPLATE_NAME);
+    String templateFile = getOfficeTemplatePath().concat(filename.startsWith("B") ? SY_APPLY_TEMPLATE_NAME : SY_CHOUJIAN_TEMPLATE_NAME);
     String fileSufix = ".pdf";
     String subDictionary = "apply/";
     String targetFile = ScsyReportUtil.getRealReportPath().concat(subDictionary)
@@ -410,6 +411,7 @@ public class AsposeUtil {
       pset.setTopMargin(0);
       pset.setBottomMargin(0);
       DocumentBuilder builder = new DocumentBuilder(docnew);
+      builder.getPageSetup().setOrientation(doc.getFirstSection().getPageSetup().getOrientation());
       for (int i = 0; i < pageNums; i++) {
         iso.setPageIndex(i);
         OutputStream output = new ByteArrayOutputStream();
@@ -441,6 +443,8 @@ public class AsposeUtil {
       Shape shape = builder.insertImage(image, RelativeHorizontalPosition.PAGE, 0, RelativeVerticalPosition.PAGE, 0, -1, -1, WrapType.NONE);
       shape.setHorizontalAlignment(HorizontalAlignment.CENTER);
       shape.setVerticalAlignment(VerticalAlignment.CENTER);
+      double shapeWidth = shape.getWidth();
+      double shapeHeight = shape.getHeight();
       PageSetup ps = builder.getDocument().getFirstSection().getPageSetup();
       ps.setTopMargin(0);
       ps.setBottomMargin(0);
@@ -449,8 +453,6 @@ public class AsposeUtil {
       double pageWidth = ps.getPageWidth();
       double pageHeight = ps.getPageHeight();
 
-      double shapeWidth = shape.getWidth();
-      double shapeHeight = shape.getHeight();
 
       double ratioX = pageWidth / shapeWidth;
       double ratioY = pageHeight / shapeHeight;

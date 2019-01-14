@@ -18,6 +18,7 @@
         f.sfmy, f.sfjsy, f.tjdx, a.sqlx, f.todoperson
         FROM sy_jymd md,
         sy_apply_wt aw,
+        sy_apply ap,
         sy_weituo a
         <if test="currentstatus!=null and currentstatus==2">
             LEFT JOIN sy_flowdata f ON a.jybh = f.jybh
@@ -61,7 +62,8 @@
         <if test="currentstatus==null or currentstatus!=2">
             LEFT JOIN frame_employee e on e.userid=f.todoperson
         </if>
-        WHERE a.inuse = 1 AND a.jymd = md.id and aw.ypbh = a.ypbh
+        WHERE a.inuse = 1 AND a.jymd = md.id and aw.ypbh = a.ypbh and ap.sqph=aw.sqph
+        and ((ap.status = 9 and ap.iscjwt=0) OR  ap.iscjwt=1)
         <if test="jynd!=null">
             AND a.jynd <![CDATA[=]]> ${jynd}
         </if>
@@ -113,7 +115,7 @@
         FROM (
         <include refid="where_sql" />
         <if test="orderby==null and 3 > currentstatus">
-            ORDER BY a.ypbh DESC
+            ORDER BY aw.sqph DESC, a.ypbh ASC
         </if>
         <if test="orderby==null and currentstatus > 2">
             ORDER BY a.jybh DESC
@@ -133,7 +135,7 @@
         LEFT JOIN frame_dictionary d8 on w.cjyj = d8.id
         LEFT JOIN frame_dictionary d9 on w.cjhj = d9.id
         LEFT JOIN frame_employee e1 on e1.userid=f1.sjr
-        order by w.jybh desc
+--         order by w.jybh desc
         <!--<if test="orderby==null and 3 > currentstatus">
             ORDER BY w.ypbh DESC
         </if>
