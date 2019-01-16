@@ -478,19 +478,6 @@ public class SyWeituoController extends BaseController {
       }
       fn = fn.startsWith("/") ? fn.substring(1) : fn;
       filenames.add(ScsyReportUtil.getSystemRootPath().concat(fn));
-//                FileUtils.copyFile(ScsyReportOfficeUtil.getRealReportPath().concat(fn), folder.getPath().concat("/").concat(jybh).concat(ScsyReportUtil.PDF_SUFFIX));
-//                File f = new File(ScsyReportUtil.getRealArchiveReportPath().concat(subDictionary)
-//                        .concat(jybh).concat(ScsyReportUtil.PDF_SUFFIX));
-//                if(!f.exists()){
-//                    f = new File(ScsyReportOfficeUtil.getRealReportPath()
-//                            .concat(subDictionary).concat(jybh).concat(ScsyReportUtil.PDF_SUFFIX));
-//                }
-//                if(!f.exists()){
-//                     f= new File(ScsyReportOfficeUtil.getRealReportPath().concat(syWeituoService.exportReport(jybh)));
-//                }
-//                if(f.exists()){
-//                    FileUtils.copyFile(f.getPath(), folder.getPath()+"/" + f.getName());
-//                }
     }
     String targetFile = ScsyReportUtil.getRealReportPath().concat(ScsyReportUtil.SY_SUBDICTIONARY)
         .concat("兽药检验报告").concat(DateUtils.formatYMDHMS()).concat(".zip");

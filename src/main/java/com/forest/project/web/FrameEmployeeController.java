@@ -24,6 +24,8 @@ import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Date;
 
@@ -46,8 +48,17 @@ public class FrameEmployeeController extends BaseController {
   }
 
   @PostMapping("/deletemore")
-  public Result deletemore(@RequestBody() String ids) {
-    frameEmployeeService.deleteByIds(ids);
+  public Result deletemore(@RequestParam(value = "ids") String ids) {
+    List<String> list = Arrays.asList(ids.split(","));
+    StringBuilder stringBuilder = new StringBuilder();
+
+    list.forEach(id ->{
+      if(stringBuilder.length() > 0) {
+        stringBuilder.append(",");
+      }
+      stringBuilder.append("'").append(id).append("'");
+    });
+    frameEmployeeService.deleteByIds(stringBuilder.toString());
     return ResultGenerator.genSuccessResult();
   }
 

@@ -411,7 +411,8 @@ public class FrameEmployee {
         this.remark = remark;
     }
 
-    public List<String> getRoles() {
+    public List<String>
+    getRoles() {
         return roles;
     }
 
