@@ -100,6 +100,7 @@ public class AsposeUtil {
       if (results != null) {
         doBeforeSave(doc, templateFile, results);
       }
+      doc.save(targetFile.replace(".pdf", ".docx"), SaveFormat.DOCX);
       save2Pdf(doc, targetFile);
       return targetFile;
     } catch (Exception e) {

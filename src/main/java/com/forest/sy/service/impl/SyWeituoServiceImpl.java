@@ -161,6 +161,8 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
       if (e.getCurrentstatus() == SyFlowdefine.STOP_INDEX) {
         String fromFile = ScsyReportUtil.getRealReportPath() + ScsyReportUtil.SY_SUBDICTIONARY + e.getJybh() + ScsyReportUtil.PDF_SUFFIX;
         FileUtils.moveFile(fromFile, ScsyReportUtil.getRealArchiveReportPath() + ScsyReportUtil.SY_SUBDICTIONARY);
+        fromFile = ScsyReportUtil.getRealReportPath() + ScsyReportUtil.SY_SUBDICTIONARY + e.getJybh() + ScsyReportUtil.DOC_SUFFIX;
+        FileUtils.moveFile(fromFile, ScsyReportUtil.getRealArchiveReportPath() + ScsyReportUtil.SY_SUBDICTIONARY);
       }
     }
   }

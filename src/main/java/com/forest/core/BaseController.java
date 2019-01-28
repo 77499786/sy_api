@@ -116,9 +116,9 @@ public class BaseController<T> {
      * @param jybh
      * @return
      */
-    public String getGuidangFileofDrugs(String jybh) {
+    public String getGuidangFileofDrugs(String jybh,String filesufix) {
         String filepath = ScsyReportUtil.getRealArchiveReportPath().concat(ScsyReportUtil.SY_SUBDICTIONARY)
-            .concat(jybh).concat(ScsyReportUtil.PDF_SUFFIX);
+            .concat(jybh).concat(filesufix); //ScsyReportUtil.PDF_SUFFIX);
         if (FileUtils.exists(filepath)) {
             return "/".concat(filepath.replace(ScsyReportUtil.getSystemRootPath(), ""));
         } else {

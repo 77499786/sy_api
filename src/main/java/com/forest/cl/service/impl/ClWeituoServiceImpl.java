@@ -127,6 +127,8 @@ public class ClWeituoServiceImpl extends AbstractService<ClWeituo> implements Cl
             if(e.getCurrentstatus() == ClFlowdefine.GUIDANG_INDEX){
                 String fromFile = ScsyReportUtil.getRealReportPath() + ScsyReportUtil.CL_SUBDICTIONARY + e.getJybh() + ScsyReportUtil.PDF_SUFFIX;
                 FileUtils.moveFile(fromFile, ScsyReportUtil.getRealArchiveReportPath().concat(ScsyReportUtil.CL_SUBDICTIONARY));
+                fromFile = ScsyReportUtil.getRealReportPath() + ScsyReportUtil.CL_SUBDICTIONARY + e.getJybh() + ScsyReportUtil.DOC_SUFFIX;
+                FileUtils.moveFile(fromFile, ScsyReportUtil.getRealArchiveReportPath().concat(ScsyReportUtil.CL_SUBDICTIONARY));
             }
         }
     }

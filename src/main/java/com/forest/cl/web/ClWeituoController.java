@@ -398,12 +398,27 @@ public class ClWeituoController extends BaseController {
     if (StringUtils.isNotBlank(todouser)) {
       params.put(ClFlowdata.KEYS_NEXTUSER, todouser);
     }
+
     params.put(ClFlowdata.KEYS_JYBH, bhlist);
     params.put(ClFlowdata.KEYS_REMARK, message);
     super.getUserAccount();
     params.put(ClFlowdata.KEYS_USER, _user);
     if (StringUtils.isNotBlank(request.getParameter("ypcll"))) {
       params.put(ClFlowdata.KEYS_REMAIN, request.getParameter("ypcll"));
+    }
+
+    if (!isback) {
+      ClWeituo weituo = new ClWeituo();
+      // 收件处理时，更新收件时间
+      if("2".equals(node)) {
+        weituo.setSjrq(DateUtils.getDate());
+      }
+      weituo.setModifer(_userid);
+      weituo.setModifytime(DateUtils.getDate());
+      Condition condition = new Condition(ClWeituo.class);
+      Example.Criteria criteria = condition.createCriteria();
+      criteria.andIn("jybh", Arrays.asList(bhlist.split(",")));
+      clWeituoService.updateByCondition(weituo, condition);
     }
 
     // 执行提交/退回处理，更新当前进度情况
@@ -426,6 +441,18 @@ public class ClWeituoController extends BaseController {
     String filepath = this.clWeituoService.exportReport(bhs);
     System.out.println("打印耗时：" + (System.currentTimeMillis() - start) + "毫秒");
     return ResultGenerator.genSuccessResult(filepath);
+  }
+
+  @PostMapping("/exportdoc")
+  public Result exportdoc(HttpServletRequest request) {
+    String bh = request.getParameter("jybh");
+    // 生成报告
+    List<String> fileNameList = new ArrayList<>();
+    String fl = super.getGuidangFileofDrugs(bh, ScsyReportUtil.DOC_SUFFIX);
+    if (fl == null) {
+      fl = clWeituoService.exportReport(bh);
+    }
+    return ResultGenerator.genSuccessResult(fl.replace(ScsyReportUtil.PDF_SUFFIX, ScsyReportUtil.DOC_SUFFIX));
   }
 
   @PostMapping("/exportexcel")

@@ -390,10 +390,13 @@ public class SyWeituoController extends BaseController {
       params.put(SyFlowdata.KEYS_REMAIN, request.getParameter("ypcll"));
     }
 
-    // 收件处理时，更新收件时间
     if (!isback) {
       SyWeituo weituo = new SyWeituo();
-      weituo.setSjrq(DateUtils.getDate());
+      // 收件处理时，更新收件时间
+      if("2".equals(request.getParameter("node"))) {
+        weituo.setSjrq(DateUtils.getDate());
+      }
+      weituo.setModifer(_userid);
       weituo.setModifytime(DateUtils.getDate());
       Condition condition = new Condition(SyWeituo.class);
       Example.Criteria criteria = condition.createCriteria();
@@ -417,7 +420,7 @@ public class SyWeituoController extends BaseController {
   @PostMapping("/preview")
   public Result preview(@RequestBody() SyWeituo weituo, HttpServletRequest request) {
     weituo = syWeituoService.findById(weituo.getId());
-    String filepath = super.getGuidangFileofDrugs(weituo.getJybh());
+    String filepath = super.getGuidangFileofDrugs(weituo.getJybh(), ScsyReportUtil.PDF_SUFFIX);
     if (filepath == null) {
       // 打印报告
       filepath = this.syWeituoService.exportReport(weituo.getJybh());
@@ -443,7 +446,7 @@ public class SyWeituoController extends BaseController {
 //        long start = System.currentTimeMillis();
     List<String> fileNameList = new ArrayList<>();
     Arrays.asList(bhs.split(",")).forEach(bh -> {
-      String fl = super.getGuidangFileofDrugs(bh);
+      String fl = super.getGuidangFileofDrugs(bh, ScsyReportUtil.PDF_SUFFIX);
       if (fl == null) {
         fl = syWeituoService.exportReport(bh);
       }
@@ -453,6 +456,18 @@ public class SyWeituoController extends BaseController {
     String filepath = ScsyReportUtil.mergePdfFiles(fileNameList, ScsyReportUtil.SY_SUBDICTIONARY); //this.syWeituoService.exportReport(bhs);
 //        System.out.println("打印耗时："+(System.currentTimeMillis()-start) + "毫秒");
     return ResultGenerator.genSuccessResult(filepath);
+  }
+
+  @PostMapping("/exportdoc")
+  public Result exportdoc(HttpServletRequest request) {
+    String bh = request.getParameter("jybh");
+    // 生成报告
+    List<String> fileNameList = new ArrayList<>();
+    String fl = super.getGuidangFileofDrugs(bh, ScsyReportUtil.DOC_SUFFIX);
+    if (fl == null) {
+      fl = syWeituoService.exportReport(bh);
+    }
+    return ResultGenerator.genSuccessResult(fl.replace(ScsyReportUtil.PDF_SUFFIX, ScsyReportUtil.DOC_SUFFIX));
   }
 
   /**
@@ -472,7 +487,7 @@ public class SyWeituoController extends BaseController {
 //            String subDictionary  = ScsyReportUtil.SY_SUBDICTIONARY;
     // 复制PDF文件
     for (String jybh : jybhlist) {
-      String fn = super.getGuidangFileofDrugs(jybh);
+      String fn = super.getGuidangFileofDrugs(jybh, ScsyReportUtil.PDF_SUFFIX);
       if (Strings.isNullOrEmpty(fn)) {
         fn = syWeituoService.exportReport(jybh);
       }

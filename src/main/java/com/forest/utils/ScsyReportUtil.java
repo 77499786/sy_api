@@ -16,6 +16,7 @@ import java.util.*;
 public class ScsyReportUtil {
 
 	public static String PDF_SUFFIX =".pdf";
+	public static String DOC_SUFFIX =".docx";
 	/** Word和PDF打印目录 */
 	private static String PATH_OF_REPORT;
 	@Value("${scsy.reportpath}")
