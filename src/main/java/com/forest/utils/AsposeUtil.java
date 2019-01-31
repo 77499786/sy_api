@@ -101,6 +101,7 @@ public class AsposeUtil {
         doBeforeSave(doc, templateFile, results);
       }
       doc.save(targetFile.replace(".pdf", ".docx"), SaveFormat.DOCX);
+//      doc.save(targetFile, SaveFormat.PDF);
       save2Pdf(doc, targetFile);
       return targetFile;
     } catch (Exception e) {
@@ -283,7 +284,7 @@ public class AsposeUtil {
     if (templateFile.contains(SY_INSPECTION_REPORT_TEMPLATE_NAME)) {
       // 抽检报告 表格扩展满页面
       Table table = (Table) doc.getChild(NodeType.TABLE, 5, true);
-      int index = 1 + rows.getRows().getCount();
+      int index = 2 + rows.getRows().getCount();
       Row lastRow = (Row) table.getRows().get(index).deepClone(true);
       try {
         lastRow.getFirstCell().getParagraphs().get(0).getRuns().get(0).setText("");
@@ -399,6 +400,7 @@ public class AsposeUtil {
     ImageSaveOptions iso = new ImageSaveOptions(SaveFormat.JPEG);
     iso.setResolution(128);
     iso.setHorizontalResolution(128);
+    iso.setJpegQuality(100);
     iso.setPrettyFormat(true);
     iso.setUseAntiAliasing(true);
     iso.setUseHighQualityRendering(true);
@@ -437,6 +439,35 @@ public class AsposeUtil {
    * @param builder
    * @param image
    */
+//  private static void addImagePage(DocumentBuilder builder, BufferedImage image) {
+//    try {
+//      builder.getParagraphFormat().setPageBreakBefore(true);
+//
+//      Shape shape = builder.insertImage(image, RelativeHorizontalPosition.PAGE, 0, RelativeVerticalPosition.PAGE, 0, -1, -1, WrapType.NONE);
+//      shape.setHorizontalAlignment(HorizontalAlignment.CENTER);
+//      shape.setVerticalAlignment(VerticalAlignment.CENTER);
+//      double shapeWidth = shape.getWidth();
+//      double shapeHeight = shape.getHeight();
+//      PageSetup ps = builder.getDocument().getFirstSection().getPageSetup();
+//      ps.setTopMargin(0);
+//      ps.setBottomMargin(0);
+//      ps.setLeftMargin(0);
+//      ps.setRightMargin(0);
+//      double pageWidth = ps.getPageWidth();
+//      double pageHeight = ps.getPageHeight();
+//
+//
+//      double ratioX = pageWidth / shapeWidth;
+//      double ratioY = pageHeight / shapeHeight;
+//      double ratio = Math.min(ratioX, ratioY);
+//      shape.setWidth(shapeWidth * ratio);
+//      shape.setHeight(shapeHeight * ratio);
+//      builder.writeln();
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//  }
+
   private static void addImagePage(DocumentBuilder builder, BufferedImage image) {
     try {
       builder.getParagraphFormat().setPageBreakBefore(true);
@@ -444,22 +475,11 @@ public class AsposeUtil {
       Shape shape = builder.insertImage(image, RelativeHorizontalPosition.PAGE, 0, RelativeVerticalPosition.PAGE, 0, -1, -1, WrapType.NONE);
       shape.setHorizontalAlignment(HorizontalAlignment.CENTER);
       shape.setVerticalAlignment(VerticalAlignment.CENTER);
-      double shapeWidth = shape.getWidth();
-      double shapeHeight = shape.getHeight();
       PageSetup ps = builder.getDocument().getFirstSection().getPageSetup();
-      ps.setTopMargin(0);
-      ps.setBottomMargin(0);
-      ps.setLeftMargin(0);
-      ps.setRightMargin(0);
       double pageWidth = ps.getPageWidth();
       double pageHeight = ps.getPageHeight();
-
-
-      double ratioX = pageWidth / shapeWidth;
-      double ratioY = pageHeight / shapeHeight;
-      double ratio = Math.max(ratioX, ratioY);
-      shape.setWidth(shapeWidth * ratio);
-      shape.setHeight(shapeHeight * ratio);
+      shape.setHeight(pageHeight);
+      shape.setWidth(pageWidth);
       builder.writeln();
     } catch (Exception e) {
       e.printStackTrace();

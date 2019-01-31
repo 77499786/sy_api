@@ -305,6 +305,9 @@ public class SyWeituoServiceImpl extends AbstractService<SyWeituo> implements Sy
         } else {
           Map<String, Object> lstt = new HashMap<String, Object>();
           lstt.put("检验项目", String.format("【%s】", jyzx));
+          lstt.put("标准规定", "");
+          lstt.put("检验结果", "");
+          lstt.put("项目结论", "");
           results.add(lstt);
           Map<String, Object> lst = new HashMap<String, Object>();
           lst.put("检验项目", ret.getJyxx());
