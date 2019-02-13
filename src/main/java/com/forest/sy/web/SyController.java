@@ -166,6 +166,11 @@ public class SyController extends BaseController {
         if (!Strings.isNullOrEmpty(jybm)) {
             param.put(keystr, jybm);
         }
+        keystr = "jyry";
+        String jyry = (String) super.getItem(pageInfo, keystr);
+        if (!Strings.isNullOrEmpty(jyry)) {
+            param.put(keystr, jyry);
+        }
 
         keystr = "startday";
         String startday = (String) super.getItem(pageInfo, keystr);

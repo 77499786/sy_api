@@ -59,8 +59,8 @@
         <if test="todoperson!=null">
             AND f.todoperson = #{todoperson}
         </if>
-        <if test="currentstatus==null or currentstatus!=2">
-            LEFT JOIN frame_employee e on e.userid=f.todoperson
+        <if test="(currentstatus==null or currentstatus!=2) and jyry!= null">
+            INNER JOIN frame_employee e on e.userid=f.todoperson and e.name like '%${jyry}%'
         </if>
         WHERE a.inuse = 1 AND a.jymd = md.id and aw.ypbh = a.ypbh and ap.sqph=aw.sqph
         and ((ap.status = 9 and ap.iscjwt=0) OR  ap.iscjwt=1)
@@ -77,13 +77,16 @@
             AND aw.sqph=#{jyph}
         </if>
         <if test="keyword!=null and currentstatus  > 2 and nodeindex != null and nodeindex != 99">
-            AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
+            AND (locate('${keyword}', a.jybh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 )
+--             AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
         </if>
         <if test="keyword!=null and (nodeindex == null or nodeindex == 99)">
-            AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%' OR a.scdw like '%${keyword}%' OR e.name like '%${keyword}%')
+            AND (locate('${keyword}', a.jybh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 OR locate('${keyword}', a.scdw)>0)
+--             AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%' OR a.scdw like '%${keyword}%')
         </if>
         <if test="keyword!=null and currentstatus != null and 2 >= currentstatus ">
-            AND (a.ypbh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
+            AND (locate('${keyword}', a.ypbh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 )
+--             AND (a.ypbh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
         </if>
     </sql>
 

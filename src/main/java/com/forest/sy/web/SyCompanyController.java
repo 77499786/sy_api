@@ -111,6 +111,7 @@ public class SyCompanyController extends BaseController {
             criteria.orLike("qydz", String.format("%%%s%%", keystr));
             criteria.orLike("scxkz", String.format("%%%s%%", keystr));
             criteria.orLike("gmp", String.format("%%%s%%", keystr));
+            criteria.orLike("userid", String.format("%%%s%%", keystr));
         }
 
         List<SyCompany> list = syCompanyService.findByCondition(condition);
