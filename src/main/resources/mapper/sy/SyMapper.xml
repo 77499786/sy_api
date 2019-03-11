@@ -80,7 +80,7 @@
             AND (locate('${keyword}', a.jybh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 )
 --             AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
         </if>
-        <if test="keyword!=null and (nodeindex == null or nodeindex == 99)">
+        <if test="keyword!=null and (nodeindex == null or nodeindex == 99 or nodeindex == null)">
             AND (locate('${keyword}', a.jybh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 OR locate('${keyword}', a.scdw)>0)
 --             AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%' OR a.scdw like '%${keyword}%')
         </if>
@@ -114,14 +114,17 @@
         DATE_FORMAT(f1.hsqr, '%Y-%m-%d') as hsqr,f1.hsqrr,f1.jysqrr,f1.ypcll,f1.sfmy,
         f1.sfjsy,f1.jyjl,f1.jsyjl, f1.tjdx, f1.todoperson,
         f1.jyrxm as jyr, f1.currentstatus,f1.sendto,f1.express,
-        DATE_FORMAT(f1.postday, '%Y-%m-%d') as postday,IF(f1.yswj != '', '已上传','') as yswj
+        DATE_FORMAT(f1.postday, '%Y-%m-%d') as postday,IF(nullif(f1.yswj,'') != '', '已上传','') as yswj
         FROM (
         <include refid="where_sql" />
         <if test="orderby==null and 3 > currentstatus">
             ORDER BY aw.sqph DESC, a.ypbh ASC
         </if>
-        <if test="orderby==null and currentstatus > 2">
+        <if test="orderby==null and currentstatus > 6">
             ORDER BY a.jybh DESC
+        </if>
+        <if test="orderby==null and currentstatus in {4,5,6} ">
+            ORDER BY a.jybh ASC
         </if>
         <if test="startindex!=null">
             LIMIT ${startindex}, ${stopindex}
@@ -138,19 +141,6 @@
         LEFT JOIN frame_dictionary d8 on w.cjyj = d8.id
         LEFT JOIN frame_dictionary d9 on w.cjhj = d9.id
         LEFT JOIN frame_employee e1 on e1.userid=f1.sjr
---         order by w.jybh desc
-        <!--<if test="orderby==null and 3 > currentstatus">
-            ORDER BY w.ypbh DESC
-        </if>
-        <if test="orderby==null and currentstatus > 2">
-            ORDER BY w.jybh DESC
-        </if>
-        <if test="startindex!=null">
-            LIMIT ${startindex}, ${stopindex}
-        </if>-->
-        <!--<if test="limitsql!=null">-->
-            <!--concat(#{limitsql})-->
-        <!--</if>-->
     </select>
 
     <select id="getSySingleItem"  resultType="java.lang.String">
