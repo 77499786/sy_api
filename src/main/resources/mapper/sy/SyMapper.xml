@@ -27,10 +27,10 @@
             INNER JOIN sy_flowdata f ON a.jybh = f.jybh
         </if>
         <if test="currentstatus==50 and option==1">
-            AND f.syqr is null
+            AND IFNULL(f.syqr,'1900-01-01') = '1900-01-01'
         </if>
         <if test="currentstatus==50 and option==2">
-            AND f.syqr is not null AND f.hsqr is null
+            AND f.syqr is not null AND IFNULL(f.hsqr,'1900-01-01') = '1900-01-01'
         </if>
         <if test="currentstatus==50 and option==3">
             AND f.hsqr is not null
