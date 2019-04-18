@@ -132,7 +132,7 @@ public class SyApplyServiceImpl extends AbstractService<SyApply> implements SyAp
     infors.put("scdw", formatNull(e.getScdw()));
     infors.put("sydw", formatNull(e.getSydw()));
     infors.put("pzwh", formatNull(e.getPzwh()));
-    infors.put("ph", formatNull(e.getPzwh()));
+    infors.put("ph", formatNull(e.getPh()));
     infors.put("remark", formatNull(e.getRemark()));
 
     infors.put("jybm", ScsyResourceUtil.getOrganization(e.getJybm()));
