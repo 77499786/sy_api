@@ -1,11 +1,16 @@
 package com.forest.sy.web;
 
 import com.forest.core.BaseController;
+import com.forest.core.ProjectConstant;
 import com.forest.core.Result;
 import com.forest.core.ResultGenerator;
 import com.forest.project.model.FrameEmployee;
 import com.forest.sy.model.SyFlowdata;
+import com.forest.sy.model.SyResult;
+import com.forest.sy.model.SyWeituo;
 import com.forest.sy.service.SyFlowdataService;
+import com.forest.sy.service.SyResultService;
+import com.forest.sy.service.SyWeituoService;
 import com.forest.utils.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -35,6 +40,10 @@ import java.util.List;
 public class SyFlowdataController extends BaseController {
   @Resource
   private SyFlowdataService syFlowdataService;
+  @Resource
+  private SyResultService syResultService;
+  @Resource
+  private SyWeituoService syWeituoService;
 
   @PostMapping("/delete")
   public Result delete(@RequestBody() SyFlowdata syFlowdata) {
@@ -149,6 +158,35 @@ public class SyFlowdataController extends BaseController {
     return ResultGenerator.genSuccessResult(message);
   }
 
+  @PostMapping("/saveresult")
+  public Result saveresult(@RequestBody() SyFlowdata syFlowdata, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return ResultGenerator.genFailResult(bindingResult.getFieldError().getDefaultMessage());
+    }
+    String message = "数据保存成功。";
+    super.getUserAccount();
+
+    if(!syFlowdata.getResults().isEmpty() && syFlowdata.getResults().size() > 0){
+      SyWeituo weituo =  syWeituoService.findBy("jybh", syFlowdata.getJybh());
+      String jl = String.format("本品按 %s 检验上述项目，结果%s符合规定。",
+          weituo.getJyyj(),isvalidResult(syFlowdata.getResults()) ? "不": "" );
+      syFlowdata.setJyjl(jl);
+      saveResults(syFlowdata.getResults(), syFlowdata.getJybh());
+    }
+    syFlowdata.setModifer(_userid);
+    syFlowdata.setModifytime(new Date());
+    if (StringUtils.isEmpty(syFlowdata.getId())) {
+      syFlowdata.setCreator(_userid);
+      syFlowdata.setCreatetime(new Date());
+      syFlowdataService.save(syFlowdata);
+      message = "新增数据成功。";
+    } else {
+      syFlowdataService.update(syFlowdata);
+      message = "数据更新成功。";
+    }
+    return ResultGenerator.genSuccessResult(message);
+  }
+
   @PostMapping("/detail")
   public Result detail(@RequestBody SyFlowdata syFlowdata) {
     if (!Strings.isNullOrEmpty(syFlowdata.getId())) {
@@ -255,6 +293,95 @@ public class SyFlowdataController extends BaseController {
     syFlowdataService.updateByCondition(syflowdata, condition);
 
     return ResultGenerator.genSuccessResult(message);
+  }
+
+  /**
+   * 判断检验结论是否合格
+   * @param results
+   * @return  true:不合格, false : 合格
+   */
+  private boolean isvalidResult(List<SyResult> results){
+    for(SyResult r : results){
+      if (r.getXmjl().length() > 4) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 保存检验结果
+   * @param results 检验结果
+   * @param jybh  检验编号
+   */
+  private void saveResults(List<SyResult> results, String jybh){
+    // 读取已有数据
+    Condition condition = new Condition(SyResult.class);
+    Example.Criteria criteria =  condition.createCriteria();
+    criteria.andEqualTo("jybh", jybh);
+    List<SyResult> exists_datas = syResultService.findByCondition(condition);
+    // 已有数据修改（逻辑删除、更新）
+    List<SyResult> newdatas = results;
+    exists_datas.forEach(e -> {
+      SyResult syResult = getEntityById(newdatas, e.getId());
+      if (syResult == null) {
+        e.setModifytime(new Date());
+        e.setModifer(_userid);
+        e.setInuse(Integer.valueOf(ProjectConstant.USE_STATUS.NOTUSE.getIndex()));
+        syResultService.update(e);
+      } else {
+        e.setJyzx(syResult.getJyzx());
+        e.setJyxx(syResult.getJyxx());
+        e.setBzgd(syResult.getBzgd());
+        e.setJybh(syResult.getJybh());
+        e.setJyjg1(syResult.getJyjg1());
+        e.setJyjg2(syResult.getJyjg2());
+        e.setJyjg3(syResult.getJyjg3());
+        e.setInuse(Integer.valueOf(ProjectConstant.USE_STATUS.INUSE.getIndex()));
+        e.setModifer(_userid);
+        e.setModifytime(new Date());
+        syResultService.update(e);
+        newdatas.removeIf(n -> e.getId().equals(n.getId()));
+      }
+    });
+    // 新数据追加
+    newdatas.forEach(syResult -> {
+      if(Strings.isNullOrEmpty(syResult.getId())){
+        syResult.setCreator(_userid);
+        syResult.setCreatetime(new Date());
+        syResult.setInuse(Integer.valueOf(ProjectConstant.USE_STATUS.INUSE.getIndex()));
+        syResult.setId(null);
+        syResultService.save(syResult);
+      } else {
+        SyResult e = syResultService.findById(syResult.getId());
+        e.setJyzx(syResult.getJyzx());
+        e.setJyxx(syResult.getJyxx());
+        e.setBzgd(syResult.getBzgd());
+        e.setJybh(syResult.getJybh());
+        e.setJyjg1(syResult.getJyjg1());
+        e.setJyjg2(syResult.getJyjg2());
+        e.setJyjg3(syResult.getJyjg3());
+        e.setInuse(Integer.valueOf(ProjectConstant.USE_STATUS.INUSE.getIndex()));
+        e.setModifer(_userid);
+        e.setModifytime(new Date());
+        syResultService.update(e);
+      }
+    });
+  }
+
+  /**
+   * 查询
+   * @param datas
+   * @param id
+   * @return
+   */
+  private SyResult getEntityById(List<SyResult> datas,String id ){
+    for ( SyResult e: datas) {
+      if (id.equals(e.getId())) {
+        return e;
+      }
+    }
+    return null;
   }
 
 }

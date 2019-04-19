@@ -197,6 +197,12 @@ public class SyFlowdata {
     private List<FlowNodeData> flowdatas;
 
     /**
+     * 检验结果明细
+     */
+    @Transient
+    private List<SyResult> results;
+
+    /**
      * @return id
      */
     public String getId() {
@@ -738,6 +744,14 @@ public class SyFlowdata {
 
     public void setYswt(String yswt) {
         this.yswt = yswt;
+    }
+
+    public List<SyResult> getResults() {
+        return results;
+    }
+
+    public void setResults(List<SyResult> results) {
+        this.results = results;
     }
 
     public String getQfrq() {

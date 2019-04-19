@@ -4,6 +4,7 @@ import com.forest.core.Result;
 import com.forest.core.ResultGenerator;
 import com.forest.core.BaseController;
 import com.forest.sy.model.SyResult;
+import com.forest.sy.service.SyFlowdataService;
 import com.forest.sy.service.SyResultService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -19,6 +20,7 @@ import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Date;
@@ -87,7 +89,7 @@ public class SyResultController extends BaseController {
     }
 
     @PostMapping("/saveresults")
-    public Result saveresults(@RequestBody() @Valid PageInfo<SyResult> pageInfo,BindingResult bindingResult) {
+    public Result saveresults(@RequestBody() @Valid PageInfo<SyResult> pageInfo, BindingResult bindingResult, HttpServletRequest request) {
         if(bindingResult.hasErrors()){
             return ResultGenerator.genFailResult(bindingResult.getFieldError().getDefaultMessage());
         }
