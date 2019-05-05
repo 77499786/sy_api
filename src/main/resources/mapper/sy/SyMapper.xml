@@ -30,10 +30,13 @@
             AND IFNULL(f.syqr,'1900-01-01') = '1900-01-01'
         </if>
         <if test="currentstatus==50 and option==2">
-            AND f.syqr is not null AND IFNULL(f.hsqr,'1900-01-01') = '1900-01-01'
+            AND f.syqr is not null AND IFNULL(f.hsqr,'1900-01-01') = '1900-01-01' AND f.currentstatus <![CDATA[>]]> 6
         </if>
         <if test="currentstatus==50 and option==3">
             AND f.hsqr is not null
+        </if>
+        <if test="nodeindex == 4">
+            AND f.syqr is not null
         </if>
         <if test="currentstatus!=null and currentstatus!=2 and currentstatus!=19 and currentstatus!=98 and currentstatus!=10 and currentstatus!=50">
             AND f.currentstatus = #{currentstatus}

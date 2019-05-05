@@ -6,6 +6,7 @@ import com.forest.project.model.FrameDictionary;
 import com.forest.project.model.FrameResource;
 import com.forest.project.model.TreeData;
 import com.forest.project.service.FrameDictionaryService;
+import com.forest.utils.ScsyResourceUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -61,6 +62,7 @@ public class FrameDictionaryController extends BaseController {
             frameDictionaryService.update(frameDictionary);
             message ="数据更新成功。";
         }
+        ScsyResourceUtil.pushDicitionary(frameDictionary.getId(), frameDictionary.getName());
         return ResultGenerator.genSuccessResult(message);
     }
 
