@@ -152,4 +152,5 @@
       WHERE ${arg0} LIKE Concat('%',#{arg1},'%')
       LIMIT 0,10
     </select>
+
 </mapper>

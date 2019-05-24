@@ -1,5 +1,6 @@
 package com.forest.sy.web;
 
+import com.aspose.cells.SaveFormat;
 import com.forest.core.BaseController;
 import com.forest.core.Result;
 import com.forest.core.ResultGenerator;
@@ -496,37 +497,6 @@ public class SyWeituoController extends BaseController {
         .concat("兽药检验报告").concat(DateUtils.formatYMDHMS()).concat(".zip");
     ZIPUtil.compress(filenames, targetFile);
     return ResultGenerator.genSuccessResult(ScsyReportUtil.path2Url(targetFile));
-//            // 打包zip文件
-//            String ls_filename = FileUtils.zip(ScsyReportOfficeUtil.getRealReportPath().concat("兽药检验报告.zip"), "", folder.getPath()); // 压缩文件
-//            // 删除打包前文件
-//            FileUtils.deleteFolder(folder.getPath());
-            /*// 文件下载
-            File file = new File(ls_filename);
-            String filename = file.getName();
-            InputStream fis = new BufferedInputStream(new FileInputStream(ls_filename));
-            // 清空response
-            response.reset();
-            // 设置response的Header
-            response.setContentType("text/html;charset=utf-8");
-            request.setCharacterEncoding("UTF-8");
-            response.addHeader("Content-Length", "" + file.length());
-            OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-disposition", "attachment;filename= "
-+                    java.net.URLEncoder.encode(filename, "UTF-8"));
-//                    + new String(filename.getBytes("utf-8"), "ISO8859-1"));
-            int bytesRead = 0;
-            byte[] buffer = new byte[8192];
-            while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
-                toClient.write(buffer, 0, bytesRead);
-            }
-            toClient.write(buffer);
-            toClient.flush();
-            toClient.close();
-            fis.close();*/
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
   }
 
   /**
@@ -544,6 +514,33 @@ public class SyWeituoController extends BaseController {
     }
 //        String filepath = this.syWeituoService.exportContract(weituo.getYpbh());
     return ResultGenerator.genSuccessResult(filepath);
+  }
+
+  @PostMapping("/queryexcel")
+  public Result queryexcel(HttpServletRequest request) {
+    Map<String, Object> param = new HashMap<String, Object>();
+    param.put("datatype", "querycj");
+    String jynd = request.getParameter("tjterm");
+    param.put("tjterm", jynd);
+    param.put("sqlwhere", "BETWEEN '".concat( request.getParameter("startday")).concat("' AND '").concat(request.getParameter("stopday")).concat("'"));
+    List<Map<String, Object>> list = this.syService.callsyDatas(param);
+    param.put("datas", new HashMapDataTable(list));
+    String templateFile = String.format("%s%sexcel/抽检监督结果.xltx",
+        ScsyReportUtil.getSystemRootPath(), ScsyReportUtil.getTemplatePath());
+    String targetFile = ScsyReportUtil.getRealReportPath().concat("temp/").concat(String.valueOf(System.currentTimeMillis())).concat(".xlsx");
+    String filepath = AsposeCellUtil.replaceText(templateFile, targetFile, param, SaveFormat.XLSX);
+    return ResultGenerator.genSuccessResult(filepath.substring(ScsyReportUtil.getSystemRootPath().length())); //file
+  }
+
+  @PostMapping("/querycjdata")
+  public Result querycjdata(HttpServletRequest request) {
+    Map<String, Object> param = new HashMap<String, Object>();
+    param.put("datatype", "querycj");
+    String jynd = request.getParameter("tjterm");
+    param.put("tjterm", jynd);
+    param.put("sqlwhere", "BETWEEN '".concat( request.getParameter("startday")).concat("' AND '").concat(request.getParameter("stopday")).concat("'"));
+    List<Map<String, Object>> list = this.syService.callsyDatas(param);
+    return ResultGenerator.genSuccessResult(list); //file
   }
 
   private String getDictionaryName(String id) {

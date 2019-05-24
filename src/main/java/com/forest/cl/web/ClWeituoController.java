@@ -463,13 +463,9 @@ public class ClWeituoController extends BaseController {
     param.put("datas", new HashMapDataTable(list));
     String templateFile = String.format("%s%sexcel/残留汇总表.xltx",
         ScsyReportUtil.getSystemRootPath(), ScsyReportUtil.getTemplatePath());
-    String targetFile = ScsyReportUtil.getRealReportPath().concat(String.valueOf(System.currentTimeMillis())).concat(".xlsx");
+    String targetFile = ScsyReportUtil.getRealReportPath().concat("temp/").concat(String.valueOf(System.currentTimeMillis())).concat(".xlsx");
     String filepath = AsposeCellUtil.replaceText(templateFile, targetFile, param, SaveFormat.XLSX);
-//        if(FileUtils.exists(ScsyReportUtil.getSystemRootPath() + filepath)) {
-//            request.setAttribute("filepath", filepath);
-//            return ResultGenerator.genSuccessResult(filepath);
-//        }
-    return ResultGenerator.genSuccessResult(filepath.replaceFirst(ScsyReportUtil.getSystemRootPath(), ""));
+    return ResultGenerator.genSuccessResult(filepath.substring(ScsyReportUtil.getSystemRootPath().length())); //filepath.replaceFirst(ScsyReportUtil.getSystemRootPath(), ""));
   }
 
   @PostMapping("/queryexcel")

@@ -38,4 +38,5 @@ public interface SyWeituoService extends Service<SyWeituo> {
      * @return
      */
     String exportContract(String ypbh);
+
 }

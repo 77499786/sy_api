@@ -168,19 +168,50 @@
     </select>
 
     <select id="queryList" parameterType="java.util.Map" resultType="java.util.Map">
-        select a.jybh, a.detect_item, d7.name as jyxmmc, d8.name as detectItemName, a.detect_limit as detectLimit,
-                a.detect_data as detectData, a.detect_result as detectResult, a.top_residue as topResidue, b.sydbh,b.ypbh,
-               b.ypmc, b.rwly,d4.name as rwlymc, b.cjyj, b.cjcs,d5.name as cjcsmc,b.bfqk,d1.name as bfqkmc,
-               b.bcqk,d2.name as bcqkmc,b.ysqk,d3.name as ysqkmc,b.cjrq,b.qyfs, d6.name as qyfsmc,
-               b.sjwmc, b.wtkhw,b.wtr,b.wtrq, c.jyjl
-        from cl_result a , cl_weituo b , cl_flowdata c,
-            frame_dictionary d1 , frame_dictionary d2, frame_dictionary d3,frame_dictionary d4,
-            frame_dictionary d5,frame_dictionary d6,frame_dictionary d7,frame_dictionary d8
-        where d7.id=JSON_EXTRACT(a.detect_item,'$[0]') and d8.id=JSON_EXTRACT(a.detect_item,'$[1]')
-          and d1.id = b.bfqk and d2.id = b.bcqk and d3.id = b.ysqk and d4.id = b.rwly
-          and d5.id = b.cjcs and d6.id = b.qyfs  and a.jybh = b.jybh and a.jybh = c.jybh
+        SELECT
+            a.jybh,
+            a.detect_item,
+            d7.NAME AS jyxmmc,
+            d8.NAME AS detectItemName,
+            a.detect_limit AS detectLimit,
+            a.detect_data AS detectData,
+            a.detect_result AS detectResult,
+            a.top_residue AS topResidue,
+            b.sydbh,
+            b.ypbh,
+            b.ypmc,
+            b.rwly,
+            d4.NAME AS rwlymc,
+            b.cjyj,
+            b.cjcs,
+            d5.NAME AS cjcsmc,
+            b.bfqk,
+            d1.NAME AS bfqkmc,
+            b.bcqk,
+            d2.NAME AS bcqkmc,
+            b.ysqk,
+            d3.NAME AS ysqkmc,
+            b.cjrq,
+            b.qyfs,
+            d6.NAME AS qyfsmc,
+            b.sjwmc,
+            b.wtkhw,
+            b.wtr,
+            b.wtrq,
+            c.jyjl
+          FROM cl_result a
+            INNER JOIN cl_weituo b On a.jybh = b.jybh
+            INNER JOIN cl_flowdata c ON a.jybh = c.jybh
+            LEFT JOIN	frame_dictionary d1 ON d1.id = b.bfqk
+            LEFT JOIN frame_dictionary d2 ON d2.id = b.bcqk
+            LEFT JOIN frame_dictionary d3 ON d3.id = b.ysqk
+            LEFT JOIN frame_dictionary d4 ON d4.id = b.rwly
+            LEFT JOIN frame_dictionary d5 ON d5.id = b.cjcs
+            LEFT JOIN frame_dictionary d6 ON d6.id = b.qyfs
+            LEFT JOIN frame_dictionary d7 ON d7.id = JSON_EXTRACT ( b.jyxm, '$[0]' )
+            LEFT JOIN frame_dictionary d8 ON d8.id = JSON_EXTRACT ( b.jyxm, '$[1]' )
         <if test="sqlwhere!=null">
-            AND ${sqlwhere}
+            WHERE ${sqlwhere}
         </if>
     </select>
 </mapper>
