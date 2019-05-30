@@ -602,3 +602,4 @@ out/template/word/结果确认通知书.docx
 *.docx
 logs/frame.log.1
 out/scsy_api.jar
+out/template/excel/抽检监督结果.xltx
