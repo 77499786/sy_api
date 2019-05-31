@@ -31,10 +31,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by CodeGenerator on 2018/04/11.
@@ -82,10 +79,15 @@ public class FrameController extends BaseController {
                 fileName = mf.getOriginalFilename();// 获取文件名
                 String extend = FileUtils.getExtend(fileName);// 获取文件扩展名
                 String myfilename = "";
-                String noextfilename = fileName.substring(0, fileName.lastIndexOf("."));// 不带扩展名
+//                String noextfilename = fileName.substring(0, fileName.lastIndexOf("."));// 不带扩展名
                 myfilename = fileName;
 
                 String savePath = realPath + myfilename;// 文件保存全路径
+                Integer maxtime = 5;
+                while(FileUtils.exists(savePath) && --maxtime > 0) {
+                    myfilename = DateUtils.formatYMDHMS().concat(".").concat(extend);
+                    savePath = realPath + myfilename;
+                }
                 String fileprefixName = FileUtils.getFilePrefix(fileName);
                 File savefile = new File(savePath);
                 // 文件拷贝到指定硬盘目录
