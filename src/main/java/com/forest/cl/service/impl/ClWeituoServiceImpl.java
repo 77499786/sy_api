@@ -147,6 +147,17 @@ public class ClWeituoServiceImpl extends AbstractService<ClWeituo> implements Cl
     public List<Map<String, Object>> queryList(Map<String, Object> paramsMap){
         return  clWeituoMapper.queryList(paramsMap);
     }
+
+    @Override
+    public List<ClWeituo> gethistoryDatas(Map<String, Object> params) {
+        return clWeituoMapper.gethistoryDatas(params);
+    }
+
+    @Override
+    public Long gethistoryDataCnt(Map<String, Object> params) {
+        return clWeituoMapper.gethistoryDataCnt(params);
+    }
+
     @Override
     public String exportReport(String jpbhs) {
         // jasper报表模式

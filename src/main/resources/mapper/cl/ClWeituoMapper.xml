@@ -214,4 +214,32 @@
             WHERE ${sqlwhere}
         </if>
     </select>
+
+    <sql id="where_sql_history">
+        SELECT a.jybh
+        from cl_weituo a, cl_flowdata b
+        where a.jybh = b.jybh and b.currentstatus > 4
+        <if test="jybh!=null">
+            AND EXISTS (SELECT 1 FROM cl_weituo o WHERE o.jybh='${jybh}' AND o.jyxm = a.jyxm)
+        </if>
+        <if test="keyword!=null">
+            AND (LOCATE('${keyword}', a.jybh) > 0 OR LOCATE('${keyword}', a.ypmc) > 0 OR LOCATE('${keyword}', a.jybh) > 0)
+        </if>
+    </sql>
+
+    <select id="gethistoryDataCnt" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT count(x.jybh) as allcount FROM (
+        <include refid="where_sql_history" />
+        ) x
+    </select>
+
+    <select id="gethistoryDatas"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
+        SELECT DISTINCT y.*
+        from cl_weituo y, (    <include refid="where_sql_history" />    ) x
+        where x.jybh = y.jybh
+        ORDER BY y.jybh desc
+        <if test="startindex!=null">
+            LIMIT ${startindex}, ${stopindex}
+        </if>
+    </select>
 </mapper>

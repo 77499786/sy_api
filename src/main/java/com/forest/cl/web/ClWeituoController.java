@@ -12,6 +12,8 @@ import com.forest.core.BaseController;
 import com.forest.core.BaseModel;
 import com.forest.core.Result;
 import com.forest.core.ResultGenerator;
+import com.forest.project.model.FrameDictionary;
+import com.forest.project.service.FrameDictionaryService;
 import com.forest.utils.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -44,6 +46,8 @@ public class ClWeituoController extends BaseController {
   private ClDetectitemService clDetectitemService;
   @Resource
   private ClFlowdataService clFlowdataService;
+  @Resource
+  private FrameDictionaryService frameDictionaryService;
 
   @PostMapping("/delete")
   public Result delete(@RequestBody() ClWeituo clWeituo) {
@@ -532,6 +536,48 @@ public class ClWeituoController extends BaseController {
     }
   }
 
+  @PostMapping("/listhistory")
+  public Result listhistory(@RequestBody() @Valid PageInfo<ClWeituo> pageInfo, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return ResultGenerator.genFailResult(bindingResult.getFieldError().getDefaultMessage());
+    }
+    Map<String, Object> param = new HashMap<String, Object>();
+    String keystr = "ypmc";
+    String keyword = (String) super.getItem(pageInfo, keystr);
+    if (!Strings.isNullOrEmpty(keyword)) {
+      param.put("keyword", keyword);
+    }
+
+    keystr = "jybh";
+    String jybh = (String) super.getItem(pageInfo, keystr);
+    if (!Strings.isNullOrEmpty(jybh)) {
+      param.put(keystr, jybh);
+    }
+
+    long cnt = clWeituoService.gethistoryDataCnt(param);
+    param.put("startindex",(pageInfo.getPageNum()-1)* pageInfo.getPageSize());
+    param.put("stopindex",pageInfo.getPageSize());
+//        param.put("orderby", "w.jybh desc");
+    List<ClWeituo> list = clWeituoService.gethistoryDatas(param);
+    list.forEach(e ->{
+      e.setJyxmmc(getDictionaryName(e.getJyxm()));
+      e.setBfqkmc(getDictionaryName(e.getBfqk()));
+      e.setBfqkmc(getDictionaryName(e.getBfqk()));
+      e.setYsqkmc(getDictionaryName(e.getYsqk()));
+//      e.setJyyj(getDictionaryName(e.getJyyj()));
+      e.setCjcs(getDictionaryName(e.getCjcs()));
+      e.setRwlymc(getDictionaryName(e.getRwly()));
+      e.setQyfsmc(getDictionaryName(e.getQyfs()));
+      String jyxms = e.getJyxm();
+      e.setJyxmmc(getJyxmName(jyxms));
+    });
+
+    PageInfo<ClWeituo> ret = new PageInfo<>();
+    ret.setList(list);
+    ret.setTotal(cnt);
+    return ResultGenerator.genSuccessResult(ret);
+  }
+
   private void addNewWeituo(ClWeituo weituo) {
     ClWeituo clWeituo = new ClWeituo();
     BeanUtils.copyProperties(weituo, clWeituo);
@@ -602,5 +648,14 @@ public class ClWeituoController extends BaseController {
       index = inputNo;
     }
     return index;
+  }
+
+  private String getDictionaryName(String id) {
+    if (!Strings.isNullOrEmpty(id)) {
+      FrameDictionary frameDictionary = frameDictionaryService.findById(id);
+      return frameDictionary != null ? frameDictionary.getName() : null;
+    } else {
+      return null;
+    }
   }
 }

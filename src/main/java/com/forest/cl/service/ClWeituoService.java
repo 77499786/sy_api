@@ -40,4 +40,8 @@ public interface ClWeituoService extends Service<ClWeituo> {
     Long queryRemainCounts(Map<String, Object> paramsMap);
 
     List<Map<String, Object>> queryList(Map<String, Object> paramsMap);
+
+    List<ClWeituo> gethistoryDatas(Map<String,Object> params);
+
+    Long gethistoryDataCnt(Map<String,Object> params);
 }

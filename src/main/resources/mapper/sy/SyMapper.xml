@@ -24,11 +24,11 @@
             LEFT JOIN sy_flowdata f ON a.jybh = f.jybh
         </if>
         <if test="currentstatus==null or currentstatus!=2">
-            INNER JOIN sy_flowdata f ON a.jybh = f.jybh
+            INNER JOIN sy_flowdata f ON a.jybh = f.jybh AND f.syqr is not null
         </if>
-        <if test="currentstatus==null">
-              AND f.syqr is not null
-        </if>
+        <!--<if test="currentstatus==null">-->
+              <!--AND f.syqr is not null-->
+        <!--</if>-->
         <if test="currentstatus==50 and option==1">
             AND IFNULL(f.syqr,'1900-01-01') = '1900-01-01'
         </if>
