@@ -63,6 +63,7 @@ public class SyCompanyController extends BaseController {
         syCompany.setModifytime(new Date());
         if(StringUtils.isEmpty(syCompany.getId())){
             addCompanyUser(syCompany);
+            syCompany.setQyzh(syCompany.getUserid());
             syCompany.setCreator(_userid);
             syCompany.setCreatetime(new Date());
             syCompanyService.save(syCompany);
@@ -144,7 +145,8 @@ public class SyCompanyController extends BaseController {
     private void addCompanyUser(SyCompany syCompany){
         // 先增加企业账号
         FrameEmployee user = new FrameEmployee();
-        user.setUserid(syCompany.getQyzh());
+        user.setUserid(syCompany.getUserid());
+        user.setCode(syCompany.getUserid());
         user.setPassword(syCompany.getQymm());
         user.setOrgId(BaseModel.ENTERPRISE_UNIT_ID);
         user.setInuse(BaseModel.INUSE.TRUE.getValue().toString());

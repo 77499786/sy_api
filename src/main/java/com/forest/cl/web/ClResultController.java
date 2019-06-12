@@ -1,4 +1,5 @@
 package com.forest.cl.web;
+import com.forest.core.BaseModel;
 import com.forest.core.Result;
 import com.forest.core.ResultGenerator;
 import com.forest.core.BaseController;
@@ -49,6 +50,7 @@ public class ClResultController extends BaseController {
         super.getUserAccount();
         clResult.setModifer(_userid);
         clResult.setModifytime(new Date());
+        clResult.setInuse(BaseModel.INUSE.TRUE.getValue());
         if(StringUtils.isEmpty(clResult.getId())){
             clResult.setCreator(_userid);
             clResult.setCreatetime(new Date());
