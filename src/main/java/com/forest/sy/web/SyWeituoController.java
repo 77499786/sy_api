@@ -522,7 +522,11 @@ public class SyWeituoController extends BaseController {
     param.put("datatype", "querycj");
     String jynd = request.getParameter("tjterm");
     param.put("tjterm", jynd);
-    param.put("sqlwhere", "BETWEEN '".concat( request.getParameter("startday")).concat("' AND '").concat(request.getParameter("stopday")).concat("'"));
+    String sqlwhere = request.getParameter("startday").concat(",").concat(request.getParameter("stopday"));
+    String tp = request.getParameter("tp");
+    sqlwhere = sqlwhere.concat(",").concat(tp);
+    param.put("sqlwhere", sqlwhere);
+    // param.put("sqlwhere", "BETWEEN '".concat( request.getParameter("startday")).concat("' AND '").concat(request.getParameter("stopday")).concat("'"));
     List<Map<String, Object>> list = this.syService.callsyDatas(param);
     param.put("datas", new HashMapDataTable(list));
     String templateFile = String.format("%s%sexcel/抽检监督结果.xltx",
