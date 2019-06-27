@@ -528,6 +528,9 @@ public class SyWeituoController extends BaseController {
     param.put("sqlwhere", sqlwhere);
     // param.put("sqlwhere", "BETWEEN '".concat( request.getParameter("startday")).concat("' AND '").concat(request.getParameter("stopday")).concat("'"));
     List<Map<String, Object>> list = this.syService.callsyDatas(param);
+    if (list.size() == 0) {
+      return ResultGenerator.genFailResult("没有查询到符合条件的数据！");
+    }
     param.put("datas", new HashMapDataTable(list));
     String templateFile = String.format("%s%sexcel/抽检监督结果.xltx",
         ScsyReportUtil.getSystemRootPath(), ScsyReportUtil.getTemplatePath());
