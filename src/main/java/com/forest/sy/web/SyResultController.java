@@ -80,7 +80,7 @@ public class SyResultController extends BaseController {
         if(Strings.isNullOrEmpty(jybh)){
             return ResultGenerator.genFailResult("参数错误");
         }
-        criteria.andEqualTo("jybh", jybh);
+        criteria.andEqualTo("jybh", jybh).andEqualTo("inuse", 1);
         condition.orderBy("sortno").asc();
         List<SyResult> list = syResultService.findByCondition(condition);
         pageInfo.setTotal(page.getTotal());

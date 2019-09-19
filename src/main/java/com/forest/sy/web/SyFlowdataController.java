@@ -337,6 +337,7 @@ public class SyFlowdataController extends BaseController {
         e.setJyjg1(syResult.getJyjg1());
         e.setJyjg2(syResult.getJyjg2());
         e.setJyjg3(syResult.getJyjg3());
+        e.setXmjl(syResult.getXmjl());
         e.setInuse(Integer.valueOf(ProjectConstant.USE_STATUS.INUSE.getIndex()));
         e.setModifer(_userid);
         e.setModifytime(new Date());
@@ -361,6 +362,7 @@ public class SyFlowdataController extends BaseController {
         e.setJyjg1(syResult.getJyjg1());
         e.setJyjg2(syResult.getJyjg2());
         e.setJyjg3(syResult.getJyjg3());
+        e.setXmjl(syResult.getXmjl());
         e.setInuse(Integer.valueOf(ProjectConstant.USE_STATUS.INUSE.getIndex()));
         e.setModifer(_userid);
         e.setModifytime(new Date());
