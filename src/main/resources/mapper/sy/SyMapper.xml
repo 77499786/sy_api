@@ -84,15 +84,22 @@
         </if>
         <if test="keyword!=null and currentstatus  > 2 and nodeindex != null and nodeindex != 99">
             AND (locate('${keyword}', a.jybh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 )
---             AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
         </if>
-        <if test="keyword!=null and (nodeindex == null or nodeindex == 99 or nodeindex == null)">
-            AND (locate('${keyword}', a.jybh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 OR locate('${keyword}', a.scdw)>0)
---             AND (a.jybh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%' OR a.scdw like '%${keyword}%')
+        <if test="keyword!=null and nodeindex == 99">
+            AND (locate('${keyword}', a.jybh)>0
+              OR locate('${keyword}', a.ypmc)>0
+              OR locate('${keyword}', a.jyyj)>0
+              OR locate('${keyword}', a.scdw)>0
+            )
+        </if>
+        <if test="keyword!=null and nodeindex == null">
+            AND (locate('${keyword}', a.jybh)>0
+                OR locate('${keyword}', a.ypmc)>0
+                OR locate('${keyword}', a.jyyj)>0
+            )
         </if>
         <if test="keyword!=null and currentstatus != null and 2 >= currentstatus ">
             AND (locate('${keyword}', a.ypbh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 )
---             AND (a.ypbh like '%${keyword}%' OR a.ypmc like '%${keyword}%' OR a.jyyj like '%${keyword}%')
         </if>
     </sql>
 
