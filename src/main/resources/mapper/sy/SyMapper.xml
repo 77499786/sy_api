@@ -96,7 +96,8 @@
             AND (locate('${keyword}', a.jybh)>0
                 OR locate('${keyword}', a.ypmc)>0
                 OR locate('${keyword}', a.jyyj)>0
-            )
+                OR locate('${keyword}', a.scdw)>0
+            ) AND f.sfmy = 0
         </if>
         <if test="keyword!=null and currentstatus != null and 2 >= currentstatus ">
             AND (locate('${keyword}', a.ypbh)>0 OR locate('${keyword}', a.ypmc)>0 OR locate('${keyword}', a.jyyj)>0 )
