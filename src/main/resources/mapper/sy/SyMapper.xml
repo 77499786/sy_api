@@ -90,7 +90,7 @@
               OR locate('${keyword}', a.ypmc)>0
               OR locate('${keyword}', a.jyyj)>0
               OR locate('${keyword}', a.scdw)>0
-            )
+            ) AND f.sfmy = 0
         </if>
         <if test="keyword!=null and nodeindex == null">
             AND (locate('${keyword}', a.jybh)>0
