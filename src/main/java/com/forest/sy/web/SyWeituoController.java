@@ -554,6 +554,38 @@ public class SyWeituoController extends BaseController {
     return ResultGenerator.genSuccessResult(list); //file
   }
 
+  @PostMapping("/querysydata")
+  public Result querysydata(HttpServletRequest request) {
+    Map<String, Object> param = new HashMap<String, Object>();
+    param.put("datatype", "querysy");
+    String jynd = request.getParameter("tjterm");
+    param.put("tjterm", jynd);
+    String sqlwhere = request.getParameter("startday").concat(",").concat(request.getParameter("stopday"));
+    param.put("sqlwhere", sqlwhere);
+    List<Map<String, Object>> list = this.syService.callsyDatas(param);
+    return ResultGenerator.genSuccessResult(list); //file
+  }
+
+  @PostMapping("/querysyexcel")
+  public Result querysyexcel(HttpServletRequest request) {
+    Map<String, Object> param = new HashMap<String, Object>();
+    param.put("datatype", "querysy");
+    String jynd = request.getParameter("tjterm");
+    param.put("tjterm", jynd);
+    String sqlwhere = request.getParameter("startday").concat(",").concat(request.getParameter("stopday"));
+    param.put("sqlwhere", sqlwhere);
+    List<Map<String, Object>> list = this.syService.callsyDatas(param);
+    if (list.size() == 0) {
+      return ResultGenerator.genFailResult("没有查询到符合条件的数据！");
+    }
+    param.put("datas", new HashMapDataTable(list));
+    String templateFile = String.format("%s%sexcel/兽药检验结果数据.xltx",
+        ScsyReportUtil.getSystemRootPath(), ScsyReportUtil.getTemplatePath());
+    String targetFile = ScsyReportUtil.getRealReportPath().concat("temp/").concat(String.valueOf(System.currentTimeMillis())).concat(".xlsx");
+    String filepath = AsposeCellUtil.replaceText(templateFile, targetFile, param, SaveFormat.XLSX);
+    return ResultGenerator.genSuccessResult(filepath.substring(ScsyReportUtil.getSystemRootPath().length())); //file
+  }
+
   private String getDictionaryName(String id) {
     if (!Strings.isNullOrEmpty(id)) {
       FrameDictionary frameDictionary = frameDictionaryService.findById(id);
