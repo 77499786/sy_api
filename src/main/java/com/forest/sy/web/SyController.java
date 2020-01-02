@@ -1,11 +1,14 @@
 package com.forest.sy.web;
 
 import com.forest.core.BaseController;
+import com.forest.core.BaseModel;
 import com.forest.core.Result;
 import com.forest.core.ResultGenerator;
 import com.forest.project.model.FrameEmployee;
 import com.forest.project.service.FrameEmployeeService;
 import com.forest.sy.model.SyQuery;
+import com.forest.sy.model.SyResult;
+import com.forest.sy.service.SyResultService;
 import com.forest.sy.service.SyService;
 import com.forest.utils.ResourceUtil;
 import com.github.pagehelper.PageInfo;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +36,8 @@ public class SyController extends BaseController {
     private SyService syService;
     @Resource
     private FrameEmployeeService frameEmployeeService;
+    @Resource
+    private SyResultService syResultService;
 
     @PostMapping("/getsydatas")
     public Result getsydatas(@RequestBody() @Valid PageInfo<SyQuery> pageInfo,
@@ -184,6 +190,12 @@ public class SyController extends BaseController {
         param.put("stopindex",pageInfo.getPageSize());
 //        param.put("orderby", "w.jybh desc");
         List<Map<String, Object>> list = syService.querySyDatas(param);
+        for (Map<String, Object> m : list) {
+            Condition condition = new Condition(SyResult.class);
+            condition.createCriteria().andEqualTo("inuse", BaseModel.INUSE.TRUE.getValue()).andEqualTo("jybh", m.get("jybh"));
+            int resultcnt = syResultService.findByCondition(condition).size();
+            m.put("jgsj", resultcnt);
+        }
         PageInfo<Map<String, Object>> ret = new PageInfo<>();
         ret.setList(list);
         ret.setTotal(cnt);
